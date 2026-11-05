@@ -18,7 +18,7 @@ Copy `.env.example` to `.env.local` to set a canonical public domain and genuine
 
 - Actual server selection: Cloudflare’s speed.cloudflare.com endpoint or this website’s first-party edge endpoint. Both use automatic routing. No fixed city or Ookla server access is claimed.
 - Single mode: one request at a time. Multi: four parallel HTTP requests; the browser controls the underlying transport connections.
-- Download, upload, idle HTTP latency and jitter. No packet loss, ICMP ping or loaded-latency claim.
+- Download, upload, idle HTTP latency and jitter. Additional median loaded HTTP latency during transfers. No packet loss or ICMP ping claim.
 - Optional connection detection: hosting-supplied IP, ASN organization and edge metadata. IP is hidden initially. Missing fields are shown unavailable. No external IP lookup vendor is used.
 - Opt-in ten-result local history, CSV export and clear controls. IP and provider details are never saved. CSV exports always use Mbps.
 - Light/dark themes, Mbps/MB/s, remembered mode/server preferences, English and Arabic test controls. Guides and policy pages remain English.
@@ -27,11 +27,15 @@ Copy `.env.example` to `.env.local` to set a canonical public domain and genuine
 
 ## Measurement method
 
-A 10 KB warm-up precedes eight empty-download probes. Latency is their median elapsed HTTP request time, including browser/server overhead. Jitter is the average absolute difference between consecutive samples. Download and upload each use two rounds at 100 KB, 1 MB and 8 MB total payload. A round taking more than 1.5 seconds skips larger sizes. Maximum synthetic payload is 36.41 MB plus overhead in either mode. Multi divides each round into four requests. Throughput uses total bits divided by shared wall-clock duration. The result is the median of two rounds at the largest completed size. Per-request timeout: 12 seconds. Overall timeout: 60 seconds.
+LibreSpeed supplies the continuous-transfer measurement worker. It is pinned to the commit recorded in public/vendor/librespeed/VERSION.txt, with the original source, modified source, LGPLv3 and GPLv3 texts distributed alongside. Modifications reject unsuccessful download/ping HTTP responses, expose diagnostic status and omit unnecessary Content-Encoding request headers. Telemetry and automatic IP lookup are disabled. The integration uses no overhead multiplier (factor 1.0).
+
+Automatic selection warms and probes the two configured endpoints, choosing their lowest median idle latency. Each direction measures for twelve seconds after a 1.5-second download or 3-second upload warm-up. Single uses one request stream; Multi uses four. Download payload size is preflight-adapted between 1 and 32 MB; upload blobs are 4 MiB. Twelve idle latency probes produce the lowest eligible response time using browser timing when available. Jitter uses LibreSpeed’s weighted variation. Separate once-per-second probes supply median loaded HTTP latency; unavailable samples remain null. Overall timeout is 75 seconds. Speed-dependent traffic can reach hundreds of MB or several GB. There is no longer a 37 MB per-test cap.
+
+New results carry engine ID librespeed-sustained-v1 and loaded-latency fields. Existing results remain labeled Legacy quick test. Engine changes are not calibrated to match Ookla. A private hosting edge, public Cloudflare edge and ISP-hosted Etisalat server have different routes and overhead. No equivalent-accuracy certification is claimed.
 
 Stop aborts active requests. Failed/stopped tests cannot be saved or exported. Small transfers can underestimate fast links. Localhost tests exercise the implementation and do not measure an internet line; use the final domain for meaningful results.
 
-Worker endpoints cap each download/upload at 8 MB, reject foreign-origin browser uploads, stream downloads with no-cache/no-transform headers, and read uploads incrementally without persisting them. Consider infrastructure usage controls before a high-traffic public launch. The alternate endpoint is available if a browser or network blocks Cloudflare requests.
+Worker endpoints cap each download at 32 MB and each upload at 8 MB, reject foreign-origin browser uploads, stream downloads with no-cache/no-transform headers, and read uploads incrementally without persisting them. Consider infrastructure usage controls before a high-traffic public launch. The alternate endpoint is available if a browser or network blocks Cloudflare requests.
 
 ## Content and launch
 

@@ -1,0 +1,5 @@
+Upstream: https://github.com/librespeed/speedtest
+Commit: 06524abd22e4581fb38a32393b80f37beec05f34
+Worker SHA256: 5A25A82080FD0FBEB1938EAD5DA3C80A924DEA295B5D0D76047984DB4C2A42BF
+Modified (2026-11-05): reject unsuccessful download/ping HTTP responses, expose diagnostic status, omit Content-Encoding request headers. Original source: speedtest_worker.upstream.js. GNU LGPLv3; license files supplied alongside.
+
