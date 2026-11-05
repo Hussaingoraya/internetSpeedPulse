@@ -44,7 +44,6 @@ export default function AnimatedSpeedometer({value,unit,phase,running,language}:
    <circle cx="210" cy="190" r="12" className="meter-hub-outer"/><circle cx="210" cy="190" r="5" className="meter-hub"/>
   </svg>
   <div className="meter-readout" aria-hidden="true"><span className="meter-stage"><i/>{stage}</span><strong>{waiting||value===null?'—':shown.toFixed(1)}</strong><span className="meter-unit"><Icon size={15}/>{unit}</span></div>
-  <span className="meter-scale-note" aria-hidden="true">{arabic?'نطاق القياس':'SCALE'} · {short(max)} {unit}</span>
   <button className="meter-motion-toggle" aria-pressed={!reduceMotion} onClick={()=>{const next=reduceMotion?'on':'off';setMotionPreference(next);try{localStorage.setItem('pulse-meter-motion',next);}catch{}}}>{reduceMotion?(arabic?'تفعيل الحركة':'Enable animation'):(arabic?'تقليل الحركة':'Reduce motion')}</button>
  </div>;
 }
