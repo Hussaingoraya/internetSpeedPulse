@@ -4,6 +4,7 @@ import { Activity, ArrowUpRight } from 'lucide-react';
 import {origin} from '@/lib/content';
 import './globals.css';
 import './features.css';
+import './speedometer.css';
 import Header from '@/components/Header';
 import {PreferencesProvider} from '@/components/Preferences';
 export const metadata:Metadata={metadataBase:new URL(origin),title:{default:'Internet Speed Test — Check Download, Upload & Ping | InternetSpeed Pulse',template:'%s | InternetSpeed Pulse'},description:'Check your internet speed with a free browser test. Measure download, upload, ping and jitter, then understand your results with practical Wi-Fi guides.',openGraph:{type:'website',siteName:'InternetSpeed Pulse',locale:'en_US'},twitter:{card:'summary_large_image'}};
