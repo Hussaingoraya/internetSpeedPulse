@@ -43,8 +43,9 @@ No AdSense scripts, fake publisher IDs, ads.txt claims, tracking analytics or pr
 - Before enabling advertising, configure any required Google-certified consent management platform for the regions served, and update the privacy notice for actual vendors and processing. A simple cookie banner is not a substitute.
 - Keep ads away from test controls and do not encourage ad clicks or manufacture traffic.
 
-Official references: https://support.google.com/adsense/answer/7299563 and https://support.google.com/adsense/answer/1348695 . Technical engine: https://github.com/cloudflare/speedtest . Fonts load from Google Fonts; consider self-hosting the font files for a production privacy/performance review.
+Official references: https://support.google.com/adsense/answer/7299563 and https://support.google.com/adsense/answer/1348695 . Technical engine: https://github.com/cloudflare/speedtest . Inter loads from Google Fonts; consider self-hosting the font files for a production privacy/performance review.
 
 ## Validation
 
 `npm run build` performs compilation, TypeScript validation and static page generation. `node scripts/check-export.mjs` checks exported metadata, local link destinations, one h1 per content page, structured data JSON and sitemap/robots presence. These checks do not establish Google approval or measure real-world Core Web Vitals.
+
