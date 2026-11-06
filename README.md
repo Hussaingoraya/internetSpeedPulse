@@ -16,12 +16,12 @@ Copy `.env.example` to `.env.local` to set a canonical public domain and genuine
 
 ## Features
 
-- Animated SVG speedometer: live-value needle easing, cyan download / purple upload arcs, connecting sweep, adaptive scale and a per-device motion toggle. System reduced-motion is respected unless the visitor explicitly enables animation. Decorative loading motion never supplies a fabricated numeric measurement.
+- Animated SVG speedometer: live-value needle easing, cyan download / purple upload arcs, connecting sweep, adaptive scale and a per-device motion toggle. Animation is enabled by default, with a per-device Reduce motion control. Decorative loading motion never supplies a fabricated numeric measurement.
 
 - Actual server selection: Cloudflare’s speed.cloudflare.com endpoint or this website’s first-party edge endpoint. Both use automatic routing. No fixed city or Ookla server access is claimed.
 - Single mode: one request at a time. Multi: four parallel HTTP requests; the browser controls the underlying transport connections.
 - Download, upload, idle HTTP latency and jitter. Additional median loaded HTTP latency during transfers. No packet loss or ICMP ping claim.
-- Optional connection detection: hosting-supplied IP, ASN organization and edge metadata. IP is hidden initially. Missing fields are shown unavailable. No external IP lookup vendor is used.
+- Automatic provider detection: hosting-supplied IP, ASN organization and edge metadata. IP is hidden initially. Missing fields are shown unavailable. No external IP lookup vendor is used.
 - Opt-in ten-result local history, CSV export and clear controls. IP and provider details are never saved. CSV exports always use Mbps.
 - Light/dark themes, Mbps/MB/s, remembered mode/server preferences, English and Arabic test controls. Guides and policy pages remain English.
 - Four-column expandable navigation; a Download menu for CSV exports and browser printing; glossary, FAQ, help, settings, server directory and two calculators.
