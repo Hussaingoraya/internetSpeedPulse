@@ -13,10 +13,14 @@ for (const url of urls) {
   assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `${path}: expected one h1`);
   const title = html.match(/<title>(.*?)<\/title>/)?.[1];
   assert(title && !titles.has(title), `${path}: missing or duplicate title`);
+  // Editorial limit, not a Google ranking threshold or pixel-width guarantee.
+  assert(title.replaceAll('&amp;', '&').length <= 65, `${path}: search title needs shortening`);
   titles.add(title);
   assert(html.includes(`rel="canonical" href="${url}"`), `${path}: canonical mismatch`);
   assert(/<meta name="description" content="[^"]+"/.test(html), `${path}: description missing`);
   assert(!/<meta name="robots" content="[^"]*noindex/.test(html), `${path}: noindex in sitemap`);
+  assert(/<link[^>]+as="font"/.test(html), `${path}: local font preload missing`);
+  assert(!html.includes('fonts.googleapis.com') && !html.includes('fonts.gstatic.com'), `${path}: external font request`);
   for (const match of html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)) {
     JSON.parse(match[1]);
   }

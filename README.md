@@ -45,7 +45,7 @@ Worker endpoints cap each download at 32 MB and each upload at 8 MB, reject fore
 
 Before AdSense, set the actual publisher identity, public domain and contact email, review content and disclosures, verify Search Console, submit the sitemap and add only genuine Google publisher/verification details. Add the exact ads.txt entry supplied by Google if required. Advertising is disabled. Configure any required certified consent platform and actual vendor disclosures before enabling ads. Google decides approval.
 
-The contact tool copies a prepared message without claiming delivery if no email is configured; otherwise it opens the mail application. Inter loads from Google Fonts, disclosed in Privacy.
+The contact tool copies a prepared message without claiming delivery if no email is configured; otherwise it opens the mail application. Inter is served locally through next/font, with its license in app/fonts.
 
 ## Verification
 
