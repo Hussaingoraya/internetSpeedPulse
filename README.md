@@ -52,3 +52,9 @@ The contact tool copies a prepared message without claiming delivery if no email
 `npm run build` compiles, validates TypeScript and generates production pages and API routes. `npm test` covers byte counts, payload limits, cross-origin upload rejection, per-request metadata, MIME/caching and 404 behavior. The legacy `scripts/check-export.mjs` checker requires a static export and does not validate this native Next.js build. Browser checks should cover both endpoints, Single/Multi, cancellation, preferences, modal focus, history/export and mobile layouts.
 
 Official references: https://support.google.com/adsense/answer/7299563 , https://support.google.com/adsense/answer/1348695 and https://www.cloudflare.com/privacypolicy/ .
+
+## SEO validation
+
+After `npm run build`, run `node scripts/check-seo.mjs` to verify unique titles, descriptions, canonical URLs, one H1 per sitemap page, parseable JSON-LD and utility-page indexing rules. The sitemap contains 21 public content destinations; history and settings remain accessible but use noindex/follow. Guides include breadcrumb structured data, publisher attribution, worked examples and modification dates. A generated PNG supplies a site-wide social preview.
+
+These checks do not measure real-user Core Web Vitals, search ranking, backlinks or Google indexing. Monitor those independently after deployment. Worked examples are illustrative calculations, not claimed field measurements.
