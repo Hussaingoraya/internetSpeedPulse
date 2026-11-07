@@ -1,6 +1,6 @@
 # InternetSpeed Pulse
 
-Next.js App Router, React and TypeScript. Pages are pre-rendered with Next.js, then packaged with a small Worker serving the generated files and first-party measurement endpoints. The existing workspace project is preserved.
+Next.js App Router, React and TypeScript. Pages are pre-rendered with Next.js. Native route handlers serve the first-party measurement endpoints at runtime.
 
 ## Run
 
@@ -10,9 +10,9 @@ npm run build
 npm run preview
 ```
 
-Preview: http://localhost:3005. `npm run dev` offers Next.js UI development, but `/api/` endpoints require the Worker preview. `next start` is not used for the export. Build creates `out/`, then embeds those files in Worker ESM at `dist/server/index.js`. Sites retains the project ID in `.openai/hosting.json`; static configuration was removed because the site now has runtime endpoints. No database or account service is required.
+Preview: http://localhost:3005. Both development and production servers include the API endpoints. Build output is `.next/`. For Hostinger, select Next.js and Node.js 22, build command `npm run build`, output `.next`, and start command `npm start` if requested. Leave the entry file blank. The legacy Worker packaging scripts are not used by this build. No database or account service is required.
 
-Copy `.env.example` to `.env.local` to set a canonical public domain and genuine support email, then rebuild. The current Sites audience remains private; Google cannot review an owner-private site for AdSense. Use a publicly accessible owned domain or explicitly configure public access before applying.
+The default canonical domain is `https://internetspeedpulse.online`. Set `NEXT_PUBLIC_SITE_URL` before building to override it. Copy `.env.example` to `.env.local` for local configuration and set a genuine support email before launch. The site must be publicly accessible for AdSense review.
 
 ## Features
 
@@ -49,6 +49,6 @@ The contact tool copies a prepared message without claiming delivery if no email
 
 ## Verification
 
-`npm run build` compiles, validates TypeScript, generates pages and packages Worker ESM. `npm test` covers byte counts, payload limits, cross-origin upload rejection, per-request metadata, MIME/caching and 404 behavior. `node scripts/check-export.mjs` checks metadata, headings, JSON-LD, internal links and crawler files. Browser checks should cover both endpoints, Single/Multi, cancellation, preferences, modal focus, history/export and mobile layouts.
+`npm run build` compiles, validates TypeScript and generates production pages and API routes. `npm test` covers byte counts, payload limits, cross-origin upload rejection, per-request metadata, MIME/caching and 404 behavior. The legacy `scripts/check-export.mjs` checker requires a static export and does not validate this native Next.js build. Browser checks should cover both endpoints, Single/Multi, cancellation, preferences, modal focus, history/export and mobile layouts.
 
 Official references: https://support.google.com/adsense/answer/7299563 , https://support.google.com/adsense/answer/1348695 and https://www.cloudflare.com/privacypolicy/ .

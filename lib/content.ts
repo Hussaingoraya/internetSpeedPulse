@@ -1,4 +1,4 @@
-export const origin = process.env.NEXT_PUBLIC_SITE_URL || 'https://pulsecheck-internet-speed.ruralbride1.chatgpt.site';
+export const origin = process.env.NEXT_PUBLIC_SITE_URL || 'https://internetspeedpulse.online';
 export const articles = [
  {slug:'what-is-a-good-internet-speed', title:'What is a good internet speed? A practical household guide',category:'THE BASICS',minutes:3,art:'speed',description:'Find the right download and upload speeds for the way you actually use the internet.',sections:[
  ['Start with your busiest hour','A good connection handles what your household does at the same time. A single person reading websites needs much less capacity than a family streaming video while someone uploads work files. Write down your busiest realistic evening: how many screens are playing, whether anyone is on a video call, and whether a backup is running. That is a better starting point than choosing the largest number on a provider’s price list.'],
