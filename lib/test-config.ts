@@ -1,6 +1,6 @@
 export const servers = [
  {id:'cloudflare',name:'Cloudflare',region:'Automatic global edge',description:'Routed by Cloudflare to an available edge. No fixed city is promised.',down:'https://speed.cloudflare.com/__down',up:'https://speed.cloudflare.com/__up'},
- {id:'pulse',name:'InternetSpeed Pulse',region:'Website edge server',description:'Measures directly against this website’s hosting edge.',down:'/api/speed/download',up:'/api/speed/upload'}
+ {id:'pulse',name:'InternetSpeed Pulse',region:'Hostinger website server',description:'Measures the path to this website’s hosting server. Its location and capacity may limit results.',down:'/api/speed/download',up:'/api/speed/upload'}
 ] as const;
 export type ServerId = typeof servers[number]['id'] | 'auto';
 export type TestMode = 'single'|'multi';

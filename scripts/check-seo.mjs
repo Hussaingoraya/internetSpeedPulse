@@ -21,12 +21,15 @@ for (const url of urls) {
   assert(!/<meta name="robots" content="[^"]*noindex/.test(html), `${path}: noindex in sitemap`);
   assert(/<link[^>]+as="font"/.test(html), `${path}: local font preload missing`);
   assert(!html.includes('fonts.googleapis.com') && !html.includes('fonts.gstatic.com'), `${path}: external font request`);
+  assert(html.includes('name="google-adsense-account" content="ca-pub-6573791611846419"'), `${path}: AdSense ownership verification missing`);
+  assert(!html.includes('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'), `${path}: ad delivery must stay disabled until CMP setup`);
   for (const match of html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)) {
     JSON.parse(match[1]);
   }
   if (path.startsWith('/blog/') && path !== '/blog/') {
     assert(html.includes('BreadcrumbList'), `${path}: breadcrumb markup missing`);
     assert(/hypothetical|illustrative|calculated examples/i.test(html), `${path}: labeled example missing`);
+    assert(html.includes('Sources and technical references'), `${path}: primary references missing`);
   }
 }
 for (const page of ['history', 'settings']) {

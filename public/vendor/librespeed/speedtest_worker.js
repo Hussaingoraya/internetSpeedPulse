@@ -18,6 +18,17 @@ let clientIp = ""; // client's IP address as reported by getIP.php
 let dlProgress = 0; //progress of download test 0-1
 let ulProgress = 0; //progress of upload test 0-1
 let pingProgress = 0; //progress of ping+jitter test 0-1
+let transferReserved = {download: 0, upload: 0};
+function reserveTransfer(direction, bytes) {
+ const limit = settings.transfer_byte_limit || 512000000;
+ if (transferReserved[direction] + bytes > limit) {
+  lastError = 'Data safeguard reached. The full measurement did not finish; no result was saved.';
+  clearRequests(); clearInterval(interval); testState = 5;
+  return false;
+ }
+ transferReserved[direction] += bytes;
+ return true;
+}
 let testId = null; //test ID (sent back by telemetry if used, null otherwise)
 
 let log = ""; //telemetry log
@@ -63,11 +74,12 @@ let settings = {
 	garbagePhp_chunkSize: 100, // size of chunks sent by garbage.php (can be different if enable_quirks is active)
 	enable_quirks: true, // enable quirks for specific browsers. currently it overrides settings to optimize for specific browsers, unless they are already being overridden with the start command
 	ping_allowPerformanceApi: true, // if enabled, the ping test will attempt to calculate the ping more precisely using the Performance API. Currently works perfectly in Chrome, badly in Edge, and not at all in Firefox. If Performance API is not supported or the result is obviously wrong, a fallback is provided.
-	overheadCompensationFactor: 1.06, //can be changed to compensate for transport overhead. (see doc.md for some other values)
+	overheadCompensationFactor: 1.0, //can be changed to compensate for transport overhead. (see doc.md for some other values)
 	useMebibits: false, //if set to true, speed will be reported in mebibits/s instead of megabits/s
 	telemetry_level: 0, // 0=disabled, 1=basic (results only), 2=full (results and timing) 3=debug (results+log)
 	url_telemetry: "results/telemetry.php", // path to the script that adds telemetry data to the database
 	telemetry_extra: "", //extra data that can be passed to the telemetry through the settings
+    request_timeout: 15000, transfer_byte_limit: 512000000, transfer_dl_bytes: 8000000,
     forceIE11Workaround: false //when set to true, it will force the IE11 upload test on all browsers. Debug only
 };
 
@@ -182,6 +194,10 @@ this.addEventListener("message", function(e) {
 			pRun = false;
 		const runNextTest = function() {
 			if (testState == 5) return;
+            if ([dlStatus,ulStatus,pingStatus,jitterStatus].includes('Fail')) {
+                lastError=lastError||'A measurement request failed.';
+                clearRequests(); clearInterval(interval); testState=5; return;
+            }
 			if (test_pointer >= settings.test_order.length) {
 				//test is finished
 				if (settings.telemetry_level > 0)
@@ -337,7 +353,8 @@ function dlTest(done) {
 		setTimeout(
 			function() {
 				if (testState !== 1) return; // delayed stream ended up starting after the end of the download test
-				tverb("dl test stream started " + i + " " + delay);
+				if (!reserveTransfer("download", settings.transfer_dl_bytes)) return;
+                tverb("dl test stream started " + i + " " + delay);
 				let prevLoaded = 0; // number of bytes loaded last time onprogress was called
 				let x = new XMLHttpRequest();
 				xhr[i] = x;
@@ -356,6 +373,8 @@ function dlTest(done) {
 				}.bind(this);
 				xhr[i].onload = function() {
                     if (x.status < 200 || x.status >= 300) { lastError = "Download HTTP " + x.status; failed = true; return; }
+                    const received = x.response && (x.response.byteLength ?? x.response.size);
+                    if (received !== settings.transfer_dl_bytes || !(x.getResponseHeader('Content-Type') || '').includes('application/octet-stream')) { lastError = 'Unexpected download payload'; failed = true; return; }
 					// the large file has been loaded entirely, start again
 					tverb("dl stream finished " + i);
 					try {
@@ -379,7 +398,9 @@ function dlTest(done) {
 					else xhr[i].responseType = "arraybuffer";
 				} catch (e) {}
 				xhr[i].open("GET", settings.url_dl + url_sep(settings.url_dl) + (settings.mpot ? "cors=true&" : "") + "r=" + Math.random() + "&ckSize=" + settings.garbagePhp_chunkSize, true); // random string to prevent caching
-				xhr[i].send();
+				xhr[i].timeout = settings.request_timeout;
+                xhr[i].ontimeout = xhr[i].onerror;
+                xhr[i].send();
 			}.bind(this),
 			1 + delay
 		);
@@ -453,6 +474,7 @@ function ulTest(done) {
 	reqsmall.push(r);
 	reqsmall = new Blob(reqsmall);
 	const testFunction = function() {
+        let completedUploads=0;
 		let totLoaded = 0.0, // total number of transmitted bytes
 			startT = new Date().getTime(), // timestamp when test was started
 			bonusT = 0, //how many milliseconds the test has been shortened by (higher on faster connections)
@@ -464,7 +486,8 @@ function ulTest(done) {
 			setTimeout(
 				function() {
 					if (testState !== 3) return; // delayed stream ended up starting after the end of the upload test
-					tverb("ul test stream started " + i + " " + delay);
+					if (!reserveTransfer("upload", req.size)) return;
+                    tverb("ul test stream started " + i + " " + delay);
 					let prevLoaded = 0; // number of bytes transmitted last time onprogress was called
 					let x = new XMLHttpRequest();
 					xhr[i] = x;
@@ -521,6 +544,7 @@ function ulTest(done) {
 						xhr[i].onload = function() {
 							// response complete — check status on captured x, not xhr[i]
 							if (x.status >= 200 && x.status < 300) {
+                                completedUploads++;
 								tverb("ul stream finished " + i);
 								testStream(i, 0);
 							} else {
@@ -538,7 +562,10 @@ function ulTest(done) {
 							// No Content-Encoding request header: random payloads do not need it. // disable compression (some browsers may refuse it, but data is incompressible anyway)
 						} catch (e) {}
 						//No Content-Type header in MPOT branch because it triggers bugs in some browsers
-						xhr[i].send(req);
+						xhr[i].timeout = settings.request_timeout;
+                        xhr[i].onerror = xhr[i].upload.onerror;
+                        xhr[i].ontimeout = xhr[i].upload.onerror;
+                        xhr[i].send(req);
 					}
 				}.bind(this),
 				delay
@@ -576,7 +603,10 @@ function ulTest(done) {
 					ulStatus = ((speed * 8 * settings.overheadCompensationFactor) / (settings.useMebibits ? 1048576 : 1000000)).toFixed(2); // speed is multiplied by 8 to go from bytes to bits, overhead compensation is applied, then everything is divided by 1048576 or 1000000 to go to megabits/mebibits
 					if ((t + bonusT) / 1000.0 > settings.time_ul_max || failed) {
 						// test is over, stop streams and timer
-						if (failed || isNaN(ulStatus)) ulStatus = "Fail";
+						if (failed || isNaN(ulStatus) || completedUploads===0) {
+                            ulStatus = "Fail";
+                            if(completedUploads===0&&!lastError)lastError='No successful upload response was received.';
+                        }
 						clearRequests();
 						clearInterval(interval);
 						ulProgress = 1;
@@ -597,7 +627,9 @@ function ulTest(done) {
 			testFunction();
 		}.bind(this);
 		xhr[0].open("POST", settings.url_ul);
-		xhr[0].send();
+		xhr[0].timeout = settings.request_timeout;
+        xhr[0].ontimeout = xhr[0].onerror;
+        xhr[0].send();
 	} else testFunction();
 }
 // ping+jitter test, function done is called when it's over
@@ -630,8 +662,7 @@ function pingTest(done) {
 				if (settings.ping_allowPerformanceApi) {
 					try {
 						//try to get accurate performance timing using performance api
-						let p = performance.getEntries();
-						p = p[p.length - 1];
+						let p = performance.getEntriesByName(xhr[0].responseURL).at(-1);
 						let d = p.responseStart - p.requestStart;
 						if (d <= 0) d = p.duration;
 						if (d > 0 && d < instspd) instspd = d;
@@ -692,7 +723,9 @@ function pingTest(done) {
 		}.bind(this);
 		// send xhr
 		xhr[0].open("GET", settings.url_ping + url_sep(settings.url_ping) + (settings.mpot ? "cors=true&" : "") + "r=" + Math.random(), true); // random string to prevent caching
-		xhr[0].send();
+		xhr[0].timeout = settings.request_timeout;
+        xhr[0].ontimeout = xhr[0].onerror;
+        xhr[0].send();
 	}.bind(this);
 	doPing(); // start first ping
 }

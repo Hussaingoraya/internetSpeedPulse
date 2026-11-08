@@ -40,14 +40,210 @@ export const articles = [
  ['Reassess with evidence','Start with a suitable plan if changing tiers is easy. Keep a week of notes about slowdowns and which tasks were happening. Upgrade when the evidence shows your capacity is repeatedly full, or when shorter transfers justify the price. If service is unreliable even at quiet times, ask the provider to resolve the fault first.'] ]}
 ];
 export const pages: Record<string,{title:string;description:string;sections:[string,string][]}> = {
- about:{title:'A clearer picture of your connection.',description:'About InternetSpeed Pulse, an independent internet speed test and learning resource.',sections:[['Publisher','InternetSpeed Pulse is published and operated by Hussain Aslam. For support, corrections or privacy enquiries, contact info@duotools.online.'],['Our purpose','InternetSpeed Pulse helps people measure their internet connection and understand what the numbers mean. We pair a straightforward browser test with practical explanations of bandwidth, Wi-Fi coverage and latency. We are independent of internet service providers, Ookla and Cloudflare; using a third-party measurement endpoint does not imply an endorsement.'],['How we create content','Our guides explain everyday troubleshooting with stated assumptions and practical examples. Planning ranges are estimates, not provider guarantees. We avoid provider rankings, invented testing claims and promises that a particular plan will solve every issue. Read our methodology for the scope and limitations of the test.'],['Corrections and transparency','Technology and services change. If you find an error, use the contact page to prepare a correction report with the page address and the disputed statement. Google AdSense is integrated for site review; approval and ad delivery are managed through Google. We will disclose any commercial relationships alongside the relevant content.']]},
- methodology:{"title":"Sustained measurements. Clear limitations.","description":"Continuous transfer testing, automatic endpoint selection and latency under load.","sections":[["The measurement engine","InternetSpeed Pulse uses LibreSpeed’s open-source browser worker, with telemetry disabled and source/license notices available below the test. It is an independent service, not an Ookla product. Our integration adds validation of endpoint responses and rejects failed HTTP transfers."],["Server selection","Choose Cloudflare’s measurement endpoint, our hosting edge, or Automatic. Automatic warms each available endpoint, takes three idle probes and chooses the lowest median response time. This compares only the available endpoints; it does not find every nearby server or force a specific city. Network paths still differ from an ISP-hosted Ookla server."],["Continuous download and upload","Each direction measures a continuous 12-second transfer window. A 1.5-second download warm-up and a 3-second upload warm-up allow the connection to settle before counters reset. Single uses one request stream; Multi uses four staggered parallel streams. Completed requests are replaced while the window remains open. HTTP/2 or HTTP/3 can reuse underlying transport connections."],["Preflight and byte accounting","Before the sustained phases, a small download verifies the expected binary payload and estimates a download request size between 1 and 32 MB. Uploads use reusable 4 MiB random-data blobs. The worker sums progress-event byte increments over elapsed sampling time, including network scheduling gaps. The overhead compensation factor is explicitly 1.0: no percentage is added to make the result resemble another service."],["Idle and loaded latency","The engine makes twelve small idle HTTP requests. It reports the lowest eligible response time, using Resource Timing when available, with elapsed request timing as a fallback. Jitter follows LibreSpeed’s weighted variation calculation, which gives spikes more weight. Separately, lightweight probes during download and upload provide median loaded HTTP latency. Missing loaded samples remain unavailable. These values are not ICMP ping or latency to a game server."],["Duration and data use","A typical run takes about 35 seconds, with a 75-second overall timeout. Data use depends on connection speed and can reach hundreds of MB or several GB; the previous approximately 37 MB quick-test cap no longer applies. Data charges may apply. Stop cancels active requests. Failed and stopped results are not saved or exported."],["Comparisons and history","For repeatable comparisons, use the same device, wired connection, mode, endpoint and test conditions. The result now records the measurement engine version. Older fixed-payload results are labeled Legacy quick test in history and should not be compared directly with sustained tests. A stronger measurement method does not guarantee identical Ookla numbers or independent accuracy certification."],["Connection detection","The speed test panel automatically reads the public IP and network organization from hosting request metadata. The IP is hidden initially, and IP/provider details are not stored in test history. Registration labels can describe a VPN or corporate network instead of your billing provider. Geographical and commercial labels are approximate."]]},
- privacy:{"title":"Your privacy, plainly explained.","description":"How connection detection, test traffic and browser storage work.","sections":[["Current behavior","We use Google AdSense to connect this site for advertising review and potential ad delivery. We do not run separate tracking analytics or account registration. Your browser and the hosting service exchange ordinary request information, including an IP address and browser headers, to deliver the site. The hosting service may maintain operational access logs under its own policies."],["Provider detection","When you open the speed test, we read your public IP address and available network organization, ASN and edge location from metadata supplied by the hosting network. This feature does not contact another IP lookup vendor. IP-based location and provider information can be approximate. The IP is hidden initially; you can reveal it using the eye control. Connection details remain in page memory and are not included in saved results or CSV exports."],["Measurement traffic","Starting a test transfers synthetic data to the selected endpoint: speed.cloudflare.com or this website’s own hosting edge. The selected provider receives your IP address and technical request information. The sustained test uses continuous transfers for twelve seconds per direction after warm-up. Data use is speed-dependent and can reach hundreds of MB or several GB. The test does not read your personal files. We do not separately upload a completed summary for analytics. Third-party endpoint processing is governed by the provider’s own privacy policy."],["Local results and preferences","Saving results is optional and disabled by default. If enabled, up to ten completed measurements and their timestamps, selected server, request mode, engine version and available loaded-latency values are stored in localStorage in this browser. IP addresses and provider labels are excluded. Theme, units, meter animation preference, test language and default mode/server preferences are also stored locally. You can clear saved results or turn off remembering, which also removes history. There is no account synchronization. Downloading CSV saves a file to your own device."],["Fonts","Inter is served directly by this website under its open font license. Loading the typeface does not contact Google Fonts. The license is distributed with the website source."],["Contact tool","Hussain Aslam operates InternetSpeed Pulse. For privacy enquiries, email info@duotools.online. The contact tool opens your email application with a draft addressed to our support inbox. The form does not submit or store messages on this website. If you send the email, your email address and message are processed by the email services involved so we can respond. Do not include passwords, public IP addresses, billing details or unnecessary personal data."],["Advertising","This website loads the Google AdSense script. Your browser contacts Google, which receives technical request information such as your IP address and browser headers. Google and its partners may use cookies to serve ads based on prior visits to this or other websites. Ad delivery depends on Google approval and our advertising settings. You can manage personalized advertising through Google Ads Settings. We will provide consent choices where required before serving ads that require consent."],["Your choices","You can read the guides without running a speed test, leave history off, clear browser storage and choose not to reveal your IP on screen. Linked services have their own privacy policies."]]},
- terms:{title:'Terms of use',description:'The conditions and limitations for using InternetSpeed Pulse.',sections:[['Using this service','InternetSpeed Pulse provides an internet measurement tool and general educational information. Use it only on networks you are authorized to use. You are responsible for any bandwidth charges and for following your provider’s terms. Stop a test if you do not wish to continue transferring data.'],['Results and availability','Results are estimates of a particular device-to-server path at a particular moment. They are not a certification of your internet plan, a service-level guarantee or a substitute for a provider’s diagnostic process. Features and third-party endpoints may be unavailable or change.'],['Content and external services','Our guides are general explanations rather than individualized technical advice. External services have their own terms and privacy practices. Third-party names belong to their respective owners. InternetSpeed Pulse has no affiliation with Ookla or the providers discussed in educational examples.'],['Responsible use','Do not automate abusive traffic, interfere with the service or use it to attack another system. Use manual tests reasonably and consider data allowances. To the extent permitted by applicable law, the service is offered as available without warranties. These terms do not exclude rights that cannot lawfully be excluded.']]},
- 'cookie-policy':{"title":"Cookies & browser storage","description":"What stays in your browser and how to manage it.","sections":[["Application storage","This application does not set its own cookies. It uses localStorage to remember theme, meter animation, speed test language, display units, server and mode preferences. Optional saved history contains up to ten completed test results. It excludes IP addresses and provider labels."],["Managing saved results","Results history offers Clear history and CSV export. Turning off Remember results also removes saved measurements. Your browser’s site-data controls can erase preferences and history. Private browsing or blocked storage may prevent persistence. No account or cross-device synchronization is provided."],["Hosting and external providers","The hosting layer may use its own authentication or security cookies, especially for an owner-private preview. Starting a Cloudflare measurement sends traffic to that service. The Inter typeface is served directly by this website. Read our privacy policy for provider processing."],["Advertising","The Google AdSense script is integrated for site review and potential ad delivery. Google and its partners may use advertising cookies; see our privacy policy and Google Ads Settings. The local results preference is separate from advertising consent. Consent choices will be provided where required before serving ads that require consent. We do not use separate analytics scripts."]]},
- disclaimer:{title:'Measurement & editorial disclaimer',description:'Important context for interpreting internet speed results and educational guides.',sections:[['Estimates, not guarantees','Results can change with device load, wireless conditions, VPN use, congestion and the destination network. A single measurement does not prove that your provider has failed to deliver its service. Repeat a controlled test and consult your contract and provider support when investigating a fault.'],['Independent information','InternetSpeed Pulse is an independent project. It is not Ookla Speedtest and is not endorsed by Cloudflare or any internet provider. Hardware and service names are used only where needed to explain a concept. We do not claim universal performance thresholds or guaranteed fixes.'],['No approval claims','The presence of informational pages does not guarantee eligibility for an advertising program. Google reviews sites and accounts independently. Google AdSense is integrated for site review; approval is not guaranteed.']]},
- 'editorial-policy':{title:'Useful answers, with context.',description:'Our approach to guides, estimates, references and corrections.',sections:[['Explain the assumptions','Our examples show how a connection behaves and what to try next. We label planning estimates, separate Wi-Fi from service speed and explain measurement limits. A guide should help a reader make a decision without exaggerating certainty.'],['No invented experience','We do not present these guides as laboratory hardware tests or claim qualifications, partnerships or review experience that have not been supplied. Hussain Aslam is responsible for reviewing technical content and maintaining corrections as the tool and referenced services change.'],['Corrections','Use the contact page to prepare a correction with a page link, the statement in question and supporting information. We will reflect significant technical changes in the article and its publication metadata. We will clearly label any paid placements if introduced.']]}
+  "about": {
+    "title": "A clearer picture of your connection.",
+    "description": "InternetSpeed Pulse is an independent speed test and guide resource operated by Hussain Aslam.",
+    "sections": [
+      [
+        "Who operates this site",
+        "InternetSpeed Pulse is published and operated by Hussain Aslam. For support, technical corrections or privacy enquiries, email info@duotools.online. No professional network-engineering credential, laboratory certification or provider partnership is claimed."
+      ],
+      [
+        "What the tool does",
+        "We measure actual browser requests to a selected destination and explain the results. A reading describes one device-to-server path at one time; it does not certify your provider’s service or measure a Wi-Fi radio link in isolation."
+      ],
+      [
+        "Independence",
+        "We are independent of Ookla, Cloudflare, LibreSpeed and internet providers. LibreSpeed supplies the open-source measurement engine under its license; this does not imply endorsement. The website is hosted on Hostinger."
+      ],
+      [
+        "Content and funding",
+        "Guides were prepared with AI assistance, checked against linked primary references, and maintained under our editorial policy. Illustrative examples are labeled. No original field research or customer tests are claimed. AdSense ownership verification is present, but ad delivery is disabled pending consent setup."
+      ]
+    ]
+  },
+  "methodology": {
+    "title": "Sustained measurements. Clear limitations.",
+    "description": "How real transfer requests, HTTP latency, request budgets and failure handling produce your results.",
+    "sections": [
+      [
+        "Before you start",
+        "Only pressing Start begins transfer testing. Provider metadata is requested separately when the page opens. A typical full run takes about 35 seconds. The 75-second overall deadline includes selection and preflight checks. Keep the tab visible: hiding it stops the run so browser throttling does not silently distort timings."
+      ],
+      [
+        "Measurement engine and selection",
+        "The locally served LibreSpeed worker uses telemetry disabled and overhead compensation set to 1.0. Automatic warms and probes each available destination, then selects the lowest median of three idle HTTP probes. This chooses among the configured destinations, not every nearby server. A manual choice does not silently switch destinations on failure."
+      ],
+      [
+        "Download and upload",
+        "Each direction targets a 12-second sampling window after a 1.5-second download or 3-second upload warm-up. Single runs one HTTP request at a time; Multi runs four staggered streams. Bytes reported by browser progress events are divided by elapsed sampling time and converted to decimal Mbps. HTTP/2 and HTTP/3 can share underlying connections. Upload progress may include browser or network buffering; this is not certified line-rate measurement."
+      ],
+      [
+        "Payloads and safeguards",
+        "Downloads adapt between 1 and 8 MB per request. Upload bodies are 4 MiB. The worker reserves at most 512 MB of requested payload per direction, including warm-up. If another request would exceed that budget, it stops as incomplete rather than publishing a shortened result. The combined payload can approach 1.024 GB plus a small preflight and protocol overhead. The warning rounds this to roughly 1.1 GB plus network overhead; it is not a billing guarantee. Fast links may reach the budget before a complete result."
+      ],
+      [
+        "Timeouts, cancellation and failures",
+        "Individual worker requests time out after 15 seconds; selection, preflight and loaded probes have shorter deadlines. The first-party upload endpoint caps bodies at 8 MB and stops stalled or interrupted reads after 15 seconds. Stop terminates the worker and aborts control requests. HTTP errors, wrong download payloads, missing essential metrics, timeouts and exhausted data budgets cannot be saved or exported as complete results."
+      ],
+      [
+        "Idle HTTP latency and jitter",
+        "Twelve warmed probes are requested; the initial warm-up response is excluded from the reported statistics. Idle latency is the lowest eligible response time. Resource Timing uses the matching request URL when available; otherwise elapsed request timing is used. Cross-origin timing restrictions may force the fallback. LibreSpeed jitter is a weighted variation between successive eligible probes, not standardized one-way IP delay variation. No ICMP ping, packet loss or application-server latency is measured."
+      ],
+      [
+        "Latency under load",
+        "A lightweight HTTP probe is attempted once a second during download and upload. Successful probes within the same phase contribute to its median, including warm-up. These probes share a busy browser and path, but do not guarantee that a slow or server-limited transfer saturates your access link. Missing samples remain unavailable rather than zero. Idle minimum and loaded median are different summaries."
+      ],
+      [
+        "Destinations and hosting limits",
+        "Cloudflare’s open-source speedtest documentation lists its public download and upload endpoints. This integration sends direct measurement traffic, not the Cloudflare package’s result-logging requests. Endpoint availability and provider policies may change; no service-level agreement or unlimited commercial-traffic entitlement is claimed. The first-party destination is this Hostinger website server. A conservative application allowance reserves up to 10 GB of first-party payload per hour per running server process by default; the operator can lower it or disable first-party transfers. This is not a distributed or monthly billing cap. Hosting capacity, geography, congestion, compression behavior and process limits may restrict a result independently of your internet plan."
+      ],
+      [
+        "History and comparison",
+        "Optional history stores ten complete results locally, with method version, server, mode, duration and available loaded-latency values. IP and provider details are excluded. Earlier unbounded sustained or quick tests are different methods; keep the same version and conditions for comparisons. No original performance study or equivalence to Ookla has been established."
+      ],
+      [
+        "Provider metadata",
+        "Hostinger currently supplies no usable ISP metadata to this application, so provider and IP details may be unavailable. We do not infer a provider from the selected test server or contact an external IP lookup vendor. When trustworthy hosting metadata is available it can describe a VPN or corporate network rather than the billing provider."
+      ]
+    ]
+  },
+  "privacy": {
+    "title": "Your privacy, plainly explained.",
+    "description": "Actual measurement providers, hosting, local storage, contact processing and advertising status.",
+    "sections": [
+      [
+        "Operator and contact",
+        "Hussain Aslam operates InternetSpeed Pulse. Email info@duotools.online for privacy questions or requests. We do not operate accounts, a user database or a separate analytics service."
+      ],
+      [
+        "Website hosting",
+        "Hostinger receives ordinary network request information, including IP addresses and browser headers, to deliver and secure the website. Hosting access logs may be retained under the hosting service’s configuration and policies. This application does not add its own visitor analytics or retain a server-side measurement summary."
+      ],
+      [
+        "Connection detection",
+        "When the test page opens, your browser requests available hosting metadata from our connection endpoint. No separate IP lookup vendor is contacted. On the current Hostinger deployment, ISP and IP fields are normally unavailable. When supplied by hosting, those details stay in page memory, the IP is hidden by default, and neither is saved in history or CSV. Network and approximate location labels may be inaccurate."
+      ],
+      [
+        "Measurement providers",
+        "Pressing Start transfers synthetic payloads to Cloudflare’s speed.cloudflare.com endpoint or to this website’s Hostinger server. Automatic selection contacts both for small probes before choosing. Those providers receive the IP address and technical request information necessary to handle traffic, under their own privacy practices. The direct integration does not send a separate completed-result telemetry report. Test traffic does not read personal files."
+      ],
+      [
+        "Data use",
+        "A full test can request roughly 1.1 GB of payload plus network overhead; each direction has a 512 MB request budget. Data charges may apply even to failed or stopped tests. Per-request and overall deadlines bound time, not your provider’s billed traffic. Avoid testing on a limited allowance."
+      ],
+      [
+        "Browser storage",
+        "The site uses localStorage for theme, units, language, server, mode and meter-motion preferences. Optional completed-result history is off by default, stores up to ten results, and excludes IP and provider details. Turning off Remember results removes history. Clear history removes measurements, while browser site-data controls can remove all stored preferences. There is no cross-device account synchronization."
+      ],
+      [
+        "Fonts and external links",
+        "Inter is hosted by this website under its open font license. Loading the font does not contact Google Fonts. External reference links contact their destinations only when followed."
+      ],
+      [
+        "Contact messages",
+        "The contact form opens an email draft addressed to info@duotools.online. The website form itself does not submit or store messages. Sending from your mail application shares your address and message with the email services involved so the operator can respond. Do not include passwords, billing information or unnecessary personal data."
+      ],
+      [
+        "Advertising and consent",
+        "The site contains an AdSense account verification meta tag and ads.txt authorization. Neither is an ad delivery script. AdSense ad requests, automatic ads and ad units are disabled in this release because a certified consent configuration has not been confirmed. We do not present the results-history checkbox as advertising consent. Before advertising is activated, this policy and the relevant vendor disclosures must reflect that setup, and required consent choices must be implemented and tested."
+      ],
+      [
+        "Your choices",
+        "Read guides without running a test, leave history off, stop a transfer, clear local results or remove site data in your browser. Contact the operator about a message you sent. The operator cannot recover or remotely delete results kept only in your browser."
+      ]
+    ]
+  },
+  "terms": {
+    "title": "Terms of use",
+    "description": "Responsible testing, service limitations and contact details for InternetSpeed Pulse.",
+    "sections": [
+      [
+        "Operator",
+        "InternetSpeed Pulse is operated by Hussain Aslam. Contact info@duotools.online with questions about these terms."
+      ],
+      [
+        "Authorized use",
+        "Use the measurement tool only on networks you are authorized to use. You are responsible for applicable bandwidth charges and provider terms. Tests consume data even when incomplete. Stop if you do not wish to continue. Do not automate abusive transfers, evade safeguards or use these endpoints to attack another service."
+      ],
+      [
+        "Scope of results",
+        "Results estimate a browser-to-server path at a particular time. They are not a certification of an advertised plan, an ISP service-level guarantee, a measurement of Wi-Fi alone or individualized engineering advice. Equipment, routing, browser behavior and server limits affect readings."
+      ],
+      [
+        "Availability and third parties",
+        "Features, providers and limits may change or be unavailable. Cloudflare and Hostinger apply their own service terms and privacy practices. Third-party names and trademarks belong to their owners; no affiliation with Ookla or an internet provider is claimed."
+      ],
+      [
+        "Content and rights",
+        "Guides provide general information and labeled examples. Third-party open-source components and fonts retain their respective licenses; source and license links are supplied. These terms do not exclude rights that cannot lawfully be excluded. Contact the operator for questions about the service or your rights."
+      ]
+    ]
+  },
+  "cookie-policy": {
+    "title": "Cookies & browser storage",
+    "description": "The storage this site actually uses and the current advertising status.",
+    "sections": [
+      [
+        "Local preferences",
+        "This application does not set its own HTTP cookies. It stores display and test preferences in localStorage, including theme, meter motion, language, units, server and connection mode. The hosting service may use its own security mechanisms or cookies."
+      ],
+      [
+        "Optional result storage",
+        "Remember results is off by default. If enabled, up to ten completed results stay in this browser, without IP addresses or provider labels. Clear history deletes those measurements. Turning off Remember results also removes them. Browser site-data controls remove preferences and saved history."
+      ],
+      [
+        "External processing",
+        "Fonts are local. Test traffic reaches the selected measurement provider after Start; Automatic uses small probes to both destinations. Provider server-side processing is described in Privacy and in the linked providers’ policies."
+      ],
+      [
+        "Advertising storage",
+        "No AdSense delivery script or ad unit is active in this release. Ownership verification uses a meta tag and ads.txt only. A results preference is not advertising consent. If advertising is introduced, the certified consent setup and vendor information must be completed before relevant ad requests are enabled."
+      ]
+    ]
+  },
+  "disclaimer": {
+    "title": "Measurement & editorial disclaimer",
+    "description": "What browser measurements and illustrative troubleshooting examples can and cannot establish.",
+    "sections": [
+      [
+        "Estimates with limits",
+        "Device load, Wi-Fi, VPNs, traffic, routing and server capacity affect readings. Compare repeated measurements under the same conditions. A result alone does not identify a faulty provider, router or cable."
+      ],
+      [
+        "Examples and independence",
+        "Worked examples are explicitly hypothetical or calculated. We do not claim original laboratory tests, provider rankings, independent accuracy certification or identical results to Ookla. InternetSpeed Pulse is an independent project operated by Hussain Aslam."
+      ],
+      [
+        "Search and advertising",
+        "Technical checks and informational pages do not guarantee Google indexing, search rankings or AdSense approval. Google makes those decisions independently. Ad delivery is currently disabled pending consent configuration."
+      ]
+    ]
+  },
+  "editorial-policy": {
+    "title": "Useful answers, with context.",
+    "description": "Publisher accountability, AI assistance, primary sources, examples and corrections.",
+    "sections": [
+      [
+        "Who is responsible",
+        "Hussain Aslam publishes and operates InternetSpeed Pulse. Questions and corrections can be sent to info@duotools.online. No unprovided professional credential or independent reviewer is claimed."
+      ],
+      [
+        "How guides are prepared",
+        "Guides were drafted and edited with AI assistance. We check technical claims against primary documentation and link relevant sources. Planning assumptions are distinguished from provider requirements, and examples are labeled hypothetical or calculated. Source links do not establish endorsement."
+      ],
+      [
+        "Evidence and original measurements",
+        "No household or provider field measurements are presented as original research. Before publishing such a comparison we would record device, adapter, firmware, network type, server, mode, test version, time, background activity and repeated results. Localhost QA checks implementation behavior, not a visitor’s internet service."
+      ],
+      [
+        "Corrections and dates",
+        "Send the page address, disputed statement and supporting evidence by email. Publication dates identify initial release; modification dates reflect edits to that page. We do not refresh dates automatically on every build. Changes to measurement methods are versioned so unlike results are not silently compared."
+      ],
+      [
+        "Commercial relationships",
+        "The site has no claimed paid provider rankings or endorsements. Ad delivery is disabled pending consent setup. Any future advertising or paid placement must be visibly identified and separated from test controls and editorial conclusions."
+      ]
+    ]
+  }
 };
-
-
-
