@@ -21,6 +21,9 @@ h2,h3{letter-spacing:-.7px}
 .test-bottom,.test-disclosure,.history-controls,.history-controls button{font-size:12px}
 .test-disclosure{max-width:890px;text-align:left;line-height:1.8}
 .history-controls{gap:16px;flex-wrap:wrap}
+.result-guides{display:flex;flex-wrap:wrap;column-gap:24px;justify-content:center;margin:12px 0}
+.result-guides a{display:inline-flex;align-items:center;gap:4px;min-height:44px;text-decoration:underline;text-underline-offset:3px}
+.result-guides svg{flex-shrink:0}
 .benefits strong{font-size:14px}.benefits p{font-size:13px}
 .explain-card p,.article-card>p,.good-speed>div>p,.faq>div>p,.faq details p{font-size:15px;line-height:1.8}
 .explain-card h3{font-size:18px}.micro-label{font-size:11px;letter-spacing:.6px}

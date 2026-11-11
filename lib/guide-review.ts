@@ -16,7 +16,7 @@ export const guideReview:Record<string,Review> = {
  },
  'why-is-my-wifi-so-slow':{
   heading:'A controlled troubleshooting sequence',
-  steps:['Test Ethernet, then nearby Wi-Fi, then the problem room on the same capable device and measurement server. Keep other traffic paused.', 'If only the distant room is slow, move the router into the open or reposition a mesh node where its backhaul is still strong; retest one change at a time.', 'If nearby Wi-Fi is also slow but Ethernet is healthy, check device capabilities, router firmware and channel interference. Start with the router manufacturer’s automatic channel settings.', 'If every connection type is slow, check competing traffic, link speed, equipment indicators and provider outages before factory-resetting anything.'],
+  steps:['If only the distant room is slow, move the router into the open or reposition a mesh node where its backhaul is still strong; retest one change at a time.', 'If nearby Wi-Fi is also slow but Ethernet is healthy, check device capabilities, router firmware and channel interference. Start with the router manufacturer’s automatic channel settings.', 'If every connection type is slow, check competing traffic, link speed, equipment indicators and provider outages before factory-resetting anything.'],
   note:'A test includes the device, local network, provider path and measurement server. It does not directly measure the Wi-Fi radio link or locate a fault. Avoid disabling router security to increase a test score.',sources:[wifi,{label:'Apple: reducing wireless interference',url:'https://support.apple.com/en-us/102319'}],
  },
  'download-vs-upload-speed':{

@@ -3,6 +3,7 @@ const queryUpdatedArticles = new Set([
  'download-vs-upload-speed',
  'how-much-internet-speed-do-i-need',
  'how-to-test-internet-speed',
+ 'why-is-my-wifi-so-slow',
 ]);
 export function articleModifiedDate(slug:string) {
  return queryUpdatedArticles.has(slug)?'2026-11-11':'2026-11-08';
