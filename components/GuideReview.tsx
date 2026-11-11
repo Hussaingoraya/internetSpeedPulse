@@ -1,4 +1,5 @@
 import {guideReview} from '@/lib/guide-review';
+import {articleModifiedDate,displayContentDate} from '@/lib/content-dates';
 
 export default function GuideReview({slug}:{slug:string}) {
  const review=guideReview[slug];
@@ -10,6 +11,6 @@ export default function GuideReview({slug}:{slug:string}) {
    <p>A large room-only drop points toward local coverage; slow results on all paths need broader investigation. This is a diagnostic diagram, not collected test data.</p>
   </figure>}
   <section><h2>{review.heading}</h2><ol>{review.steps.map(step=><li key={step}>{step}</li>)}</ol><p>{review.note}</p></section>
-  <section><h2>Sources and technical references</h2><ul>{review.sources.map(source=><li key={source.url}><a href={source.url}>{source.label}</a></li>)}</ul><p>Sources checked November 8, 2026. Worked examples are calculations or hypothetical scenarios, not field measurements. <a href="/editorial-policy/">How we prepare and correct guides</a>.</p></section>
+  <section><h2>Sources and technical references</h2><ul>{review.sources.map(source=><li key={source.url}><a href={source.url}>{source.label}</a></li>)}</ul><p>Content updated {displayContentDate(articleModifiedDate(slug))}. Worked examples are calculations or hypothetical scenarios, not field measurements. <a href="/editorial-policy/">How we prepare and correct guides</a>.</p></section>
  </>;
 }

@@ -5,5 +5,5 @@ export const articleSearchTitles: Record<string, string> = {
   'why-is-my-wifi-so-slow': 'Why Is My Wi-Fi So Slow? Fixes to Try',
   'download-vs-upload-speed': 'Download vs. Upload Speed Explained',
   'ping-and-jitter-explained': 'Ping and Jitter Explained',
-  'how-much-internet-speed-do-i-need': 'How Much Internet Speed Do I Need?',
+  'how-much-internet-speed-do-i-need': 'How Much Broadband Speed Do I Need?',
 };

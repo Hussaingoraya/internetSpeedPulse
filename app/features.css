@@ -32,3 +32,5 @@ html[data-theme=dark] :focus-visible{outline-color:#c5ef7b}
  .test-panel .test-main .start-area{order:-1;width:100%;min-height:0;margin:10px auto 14px;padding:0}
  .test-panel .test-main .start-area>p{margin-top:8px}.test-panel .test-main .start-area .phase{display:block;margin-bottom:10px}
 }
+
+.query-guide-links{display:flex;flex-direction:column;gap:12px;padding-top:22px;font-size:14px;color:var(--ink)}.query-guide-links a{text-decoration:underline;text-underline-offset:3px;line-height:1.7;overflow-wrap:anywhere}
