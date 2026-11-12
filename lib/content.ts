@@ -1,3 +1,4 @@
+import {newGuides} from './new-guides';
 import {guideExtraSections} from './guide-extra';
 export const origin = process.env.NEXT_PUBLIC_SITE_URL || 'https://internetspeedpulse.online';
 const baseArticles = [
@@ -47,10 +48,10 @@ const baseArticles = [
  ['Reassess with evidence','Start with a suitable plan if changing tiers is easy. Keep a week of notes about slowdowns and which tasks were happening. Upgrade when the evidence shows your capacity is repeatedly full, or when shorter transfers justify the price. If service is unreliable even at quiet times, ask the provider to resolve the fault first.'] ]}
 ];
 // Extra sections are inserted before each guide's final section so the closing advice stays last.
-export const articles = baseArticles.map(a=>{
+export const articles = [...baseArticles.map(a=>{
   const extra=guideExtraSections[a.slug]??[];
   return {...a, sections:[...a.sections.slice(0,-1),...extra,...a.sections.slice(-1)] as string[][]};
-});
+}), ...newGuides];
 export const pages: Record<string,{title:string;description:string;sections:[string,string][]}> = {
   "about": {
     "title": "A clearer picture of your connection.",

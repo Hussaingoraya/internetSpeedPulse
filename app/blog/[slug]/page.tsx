@@ -1,14 +1,104 @@
 import type {Metadata} from 'next';
-import {articleModifiedDate,displayContentDate} from '@/lib/content-dates';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
-import {articles,origin} from '@/lib/content';
 import Art from '@/components/Art';
-import {readingMinutes} from '@/lib/reading-time';
 import GuideReview from '@/components/GuideReview';
 import AdPlacement from '@/components/AdPlacement';
-import {articleSearchTitles} from '@/lib/seo';
+import {articles,origin} from '@/lib/content';
+import {displayContentDate,getArticleDates} from '@/lib/content-dates';
 import {guideExamples} from '@/lib/guide-examples';
-export function generateStaticParams(){return articles.map(a=>({slug:a.slug}));}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const a=articles.find(x=>x.slug===slug);return a?{title:{absolute:`${articleSearchTitles[slug] || a.title} | InternetSpeed Pulse`},description:a.description,alternates:{canonical:`/blog/${slug}/`},openGraph:{type:'article',title:a.title,description:a.description,url:`/blog/${slug}/`,publishedTime:'2026-11-05T00:00:00+04:00',modifiedTime:articleModifiedDate(slug)}}:{};}
-export default async function Article({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const a=articles.find(x=>x.slug===slug);if(!a)notFound();return <div className="content-shell article-page"><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({'@context':'https://schema.org','@type':'Article',headline:a.title,description:a.description,mainEntityOfPage:`${origin}/blog/${a.slug}/`,author:{'@type':'Organization',name:'InternetSpeed Pulse',url:`${origin}/about/`},publisher:{'@type':'Organization',name:'InternetSpeed Pulse'},datePublished:'2026-11-05T00:00:00+04:00',dateModified:articleModifiedDate(slug)})}}/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{name:'Home',item:origin+'/'},{name:'Guides',item:origin+'/blog/'},{name:a.title,item:origin+'/blog/'+a.slug+'/'}].map((item,i)=>({'@type':'ListItem',position:i+1,...item}))})}}/><nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/blog/">Guides</Link><span>/</span><span>{a.category.toLowerCase()}</span></nav><header className="article-header"><span className="eyebrow">{a.category} · {readingMinutes(a)} MIN READ</span><h1>{a.title}</h1><p>{a.description}</p><div className="byline">InternetSpeed Pulse · Published November 5, 2026 · Updated {displayContentDate(articleModifiedDate(slug))} · Publisher: <Link href="/about/">Hussain Aslam</Link></div></header><Art type={a.art}/><div className="article-body"><aside><span className="eyebrow">IN THIS GUIDE</span>{a.sections.map(([title],i)=><a href={`#section-${i}`} key={title}>{title}</a>)}<Link className="aside-test" href="/">Check your speed ↗</Link></aside><article className="prose">{a.sections.map(([title,text],i)=><section key={title} id={`section-${i}`}><h2>{title}</h2><p>{text}</p></section>)}{guideExamples[slug]&&<section><h2>{guideExamples[slug].title}</h2><p>{guideExamples[slug].text}</p><p><Link href={guideExamples[slug].link}>{guideExamples[slug].label} ↗</Link></p>{['what-is-a-good-internet-speed','how-much-internet-speed-do-i-need'].includes(slug)&&<p>Source: <a href="https://help.netflix.com/en/node/306">Netflix streaming speed recommendations</a>. Household budgets above are illustrative estimates.</p>}</section>}<GuideReview slug={slug}/><div className="article-takeaway"><h2>Put the numbers in context.</h2><p>Run a baseline test, keep the conditions consistent and compare several results before making a change.</p><Link href="/" className="text-link">Test your connection ↗</Link></div><h2>Further reading</h2><p><a href="https://developers.cloudflare.com/fundamentals/performance/test-speed/">Cloudflare: testing connection speed</a> · <Link href="/methodology/">Our measurement methodology</Link> · <Link href="/editorial-policy/">Editorial policy & corrections</Link></p><AdPlacement location="article-end"/></article></div><section className="related"><h2>Keep making sense of your connection.</h2>{articles.filter(x=>x.slug!==slug).slice(0,3).map(x=><Link key={x.slug} href={`/blog/${x.slug}/`}>{x.title} ↗</Link>)}</section></div>}
+import {newGuideSources} from '@/lib/new-guide-sources';
+import {readingMinutes} from '@/lib/reading-time';
+import {articleSearchTitles} from '@/lib/seo';
+
+type Props = {params: Promise<{slug:string}>};
+
+const relatedOriginal: Record<string,string[]> = {
+ 'what-is-a-good-internet-speed': ['how-much-internet-speed-do-i-need','video-call-internet-speed','how-to-test-internet-speed'],
+ 'how-to-test-internet-speed': ['why-speed-tests-differ','speed-test-mobile-data','speed-test-evidence-for-provider'],
+ 'why-is-my-wifi-so-slow': ['router-placement-guide','wifi-bands-24-5-6-ghz','ethernet-vs-wifi'],
+ 'download-vs-upload-speed': ['mbps-vs-mbs','video-call-internet-speed','what-is-a-good-internet-speed'],
+ 'ping-and-jitter-explained': ['video-call-internet-speed','does-vpn-slow-internet','why-speed-tests-differ'],
+ 'how-much-internet-speed-do-i-need': ['what-is-a-good-internet-speed','video-call-internet-speed','mbps-vs-mbs'],
+};
+
+export function generateStaticParams() {
+ return articles.map(({slug})=>({slug}));
+}
+
+export async function generateMetadata({params}:Props):Promise<Metadata> {
+ const {slug}=await params;
+ const guide=articles.find(article=>article.slug===slug);
+ if(!guide)return {};
+ const {published,modified}=getArticleDates(slug);
+ const url=`/blog/${slug}/`;
+ const title='searchTitle' in guide?guide.searchTitle:articleSearchTitles[slug] || guide.title;
+ return {
+  title:{absolute:`${title} | InternetSpeed Pulse`},description:guide.description,
+  alternates:{canonical:url},
+  openGraph:{type:'article',title:guide.title,description:guide.description,url,publishedTime:published,modifiedTime:modified},
+ };
+}
+
+export default async function Article({params}:Props) {
+ const {slug}=await params;
+ const guide=articles.find(article=>article.slug===slug);
+ if(!guide)notFound();
+ const {published,modified}=getArticleDates(slug);
+ const example=guideExamples[slug];
+ const sources=newGuideSources[slug];
+ const tool='tool' in guide?guide.tool:null;
+ const relatedSlugs='related' in guide?guide.related:relatedOriginal[slug];
+ const related=relatedSlugs.flatMap(relatedSlug=>articles.filter(article=>article.slug===relatedSlug));
+ const url=`${origin}/blog/${slug}/`;
+ const articleSchema={
+  '@context':'https://schema.org','@type':'Article',headline:guide.title,description:guide.description,
+  mainEntityOfPage:url,
+  author:{'@type':'Organization',name:'InternetSpeed Pulse',url:`${origin}/about/`},
+  publisher:{'@type':'Organization',name:'InternetSpeed Pulse'},
+  datePublished:published,dateModified:modified,
+ };
+ const breadcrumbSchema={
+  '@context':'https://schema.org','@type':'BreadcrumbList',
+  itemListElement:[{name:'Home',item:origin+'/'},{name:'Guides',item:origin+'/blog/'},{name:guide.title,item:url}]
+   .map((item,i)=>({'@type':'ListItem',position:i+1,...item})),
+ };
+ return <div className="content-shell article-page">
+  <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(articleSchema).replaceAll('<','\\u003c')}}/>
+  <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbSchema).replaceAll('<','\\u003c')}}/>
+  <nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span>/</span><Link href="/blog/">Guides</Link><span>/</span><span>{guide.category.toLowerCase()}</span></nav>
+  <header className="article-header">
+   <span className="eyebrow">{guide.category} · {readingMinutes(guide)} MIN READ</span>
+   <h1>{guide.title}</h1><p>{guide.description}</p>
+   <div className="byline">InternetSpeed Pulse · Published <time dateTime={published}>{displayContentDate(published)}</time> · Updated <time dateTime={modified}>{displayContentDate(modified)}</time> · Publisher <Link href="/about/">Hussain Aslam</Link></div>
+  </header>
+  <Art type={guide.art}/>
+  <div className="article-body">
+   <aside><span className="eyebrow">IN THIS GUIDE</span>
+    {guide.sections.map(([title],i)=><a href={`#section-${i}`} key={title}>{title}</a>)}
+    <Link className="aside-test" href="/">Check your speed ↗</Link>
+   </aside>
+   <article className="prose">
+    {guide.sections.map(([title,body],i)=><section key={title} id={`section-${i}`}>
+     <h2>{title}</h2>{body.split('\n\n').map((paragraph,index)=><p key={index}>{paragraph}</p>)}
+    </section>)}
+    {example&&<section>
+     <h2>{example.title}</h2><p>{example.text}</p><p><Link href={example.link}>{example.label} ↗</Link></p>
+     {['what-is-a-good-internet-speed','how-much-internet-speed-do-i-need'].includes(slug)&&<p><a href="https://help.netflix.com/en/node/306">Netflix streaming speed recommendations</a>. Household budgets above are illustrative estimates.</p>}
+    </section>}
+    <GuideReview slug={slug}/>
+    {tool&&<p><Link href={tool.href}>{tool.label} ↗</Link></p>}
+    {!tool&&<div className="article-takeaway"><h2>Put the numbers in context.</h2><p>Run a baseline test, keep the conditions consistent and compare several results before making a change.</p><Link href="/" className="text-link">Test your connection ↗</Link></div>}
+    <section>
+     <h2>{sources?'Sources and technical references':'Further reading'}</h2>
+     {sources?<ul>{sources.map(source=><li key={source.url}><a href={source.url}>{source.label}</a></li>)}</ul>:<p><a href="https://developers.cloudflare.com/fundamentals/performance/test-speed/">Cloudflare connection speed testing documentation</a></p>}
+     <p><Link href="/methodology/">Measurement methodology</Link> · <Link href="/editorial-policy/">Editorial policy &amp; corrections</Link></p>
+    </section>
+    <AdPlacement location="article-end"/>
+   </article>
+  </div>
+  <section className="related"><h2>Related guides</h2>
+   {related.map(article=><Link key={article.slug} href={`/blog/${article.slug}/`}>{article.title} ↗</Link>)}
+  </section>
+ </div>;
+}

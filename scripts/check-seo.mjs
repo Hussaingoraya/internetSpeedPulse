@@ -28,7 +28,7 @@ for (const url of urls) {
   }
   if (path.startsWith('/blog/') && path !== '/blog/') {
     assert(html.includes('BreadcrumbList'), `${path}: breadcrumb markup missing`);
-    assert(/hypothetical|illustrative|calculated examples/i.test(html), `${path}: labeled example missing`);
+    assert(/hypothetical|illustrative|calculated examples?/i.test(html), `${path}: labeled example missing`);
     assert(html.includes('Sources and technical references'), `${path}: primary references missing`);
   }
 }
