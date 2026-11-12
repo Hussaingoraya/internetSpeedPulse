@@ -72,3 +72,9 @@ Engine ID librespeed-bounded-v2 distinguishes changed limits from earlier tests.
 ## Publisher details
 
 Confirm that `info@duotools.online` receives mail before publishing the expanded About page. It is the current contact address on a different domain. The guide byline uses the site as editorial publisher, and the About page identifies Hussain Aslam as operator. Replace the empty operator bio in `lib/author.ts` with an approved short bio when available.
+
+## Original evidence case study
+
+The case study route returns a 404 by default. Set `CASE_STUDY_ENABLED=true` before a local build to review the draft at `/case-study/`. A flagged draft stays out of the sitemap and About links and carries `noindex` while evidence is pending.
+
+Follow the collection plan in [the site audit](docs/audit-2026-11-08.md). Enter the observed settings, runs (including incomplete attempts) and interpretation in `lib/case-study.ts`. Add links to the reviewed CSV and redacted screenshots and enter the publication date. With the flag enabled, the About link and sitemap entry appear when those fields are populated and each condition has three completed readings. Review the files and wording before publishing.
