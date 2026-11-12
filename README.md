@@ -82,3 +82,12 @@ Follow the collection plan in [the site audit](docs/audit-2026-11-08.md). Enter 
 ## Language coverage
 
 The speed test offers English and Arabic controls. Guides and policies are currently available in English. To add a translated guide, create a locale-specific route and reviewed translation, set the page language and direction, and localize titles, descriptions, slugs where appropriate, related links, and dates. Give each published translation its own canonical URL and reciprocal hreflang links. Add translated URLs to the sitemap when ready. Test the locale switch, keyboard access, mobile layouts and right-to-left rendering. Have a fluent reviewer check the technical terms and any localized policy wording.
+
+## AdSense readiness checklist
+
+- [ ] Review the [AdSense program policies](https://support.google.com/adsense/answer/48182) and resolve issues shown in AdSense.
+- [ ] Verify a [Google-certified consent management platform](https://support.google.com/adsense/answer/13554116) with IAB TCF integration before serving personalized ads in the EEA, UK or Switzerland. Check applicable consent and disclosure requirements for the actual setup and update the privacy and cookie policies before enabling delivery.
+- [ ] Follow the [ad placement policies](https://support.google.com/adsense/answer/1346295). Keep ads away from Start and Stop, server selection, results actions and CSV controls. Check desktop and touch layouts.
+- [ ] Reserve space for any future ad slot and check [layout shift](https://web.dev/articles/optimize-cls) at different widths with slow loading and empty slots.
+- [ ] Confirm the hosting transfer allowance and monitor traffic. The runtime measurement limit applies per process. Enforce any monthly cap separately.
+- [ ] Confirm the contact mailbox works and review the guides and any original evidence before publication.
