@@ -72,7 +72,7 @@ export default async function Article({params}:Props) {
    <span className="eyebrow">{guide.category} · {readingMinutes(guide)} MIN READ</span>
    <h1>{guide.title}</h1><p>{guide.description}</p>
    <div className="byline"><Link href={guideAuthor.profilePath}>{guideAuthor.name}</Link> · {guideAuthor.role} · Published <time dateTime={published}>{displayContentDate(published)}</time> · Updated <time dateTime={modified}>{displayContentDate(modified)}</time></div>
-   <p className="byline">Prepared with AI assistance. <Link href="/editorial-policy/">Editorial policy and corrections</Link></p>
+   <p className="byline">Guides and policies are in English. Prepared with AI assistance. <Link href="/editorial-policy/">Editorial policy and corrections</Link></p>
   </header>
   <Art type={guide.art}/>
   <div className="article-body">

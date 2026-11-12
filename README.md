@@ -78,3 +78,7 @@ Confirm that `info@duotools.online` receives mail before publishing the expanded
 The case study route returns a 404 by default. Set `CASE_STUDY_ENABLED=true` before a local build to review the draft at `/case-study/`. A flagged draft stays out of the sitemap and About links and carries `noindex` while evidence is pending.
 
 Follow the collection plan in [the site audit](docs/audit-2026-11-08.md). Enter the observed settings, runs (including incomplete attempts) and interpretation in `lib/case-study.ts`. Add links to the reviewed CSV and redacted screenshots and enter the publication date. With the flag enabled, the About link and sitemap entry appear when those fields are populated and each condition has three completed readings. Review the files and wording before publishing.
+
+## Language coverage
+
+The speed test offers English and Arabic controls. Guides and policies are currently available in English. To add a translated guide, create a locale-specific route and reviewed translation, set the page language and direction, and localize titles, descriptions, slugs where appropriate, related links, and dates. Give each published translation its own canonical URL and reciprocal hreflang links. Add translated URLs to the sitemap when ready. Test the locale switch, keyboard access, mobile layouts and right-to-left rendering. Have a fluent reviewer check the technical terms and any localized policy wording.
