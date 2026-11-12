@@ -1,5 +1,6 @@
+import {guideExtraSections} from './guide-extra';
 export const origin = process.env.NEXT_PUBLIC_SITE_URL || 'https://internetspeedpulse.online';
-export const articles = [
+const baseArticles = [
  {slug:'what-is-a-good-internet-speed', title:'What is a good internet speed? A practical household guide',category:'THE BASICS',minutes:3,art:'speed',description:'Find the right download and upload speeds for the way you actually use the internet.',sections:[
  ['Start with your busiest hour','A good connection handles what your household does at the same time. A single person reading websites needs much less capacity than a family streaming video while someone uploads work files. Write down your busiest realistic evening: how many screens are playing, whether anyone is on a video call, and whether a backup is running. That is a better starting point than choosing the largest number on a provider’s price list.'],
  ['Use these planning ranges','For light browsing and email, allow roughly 5–10 Mbps per active person. For an HD stream, budget around 5–10 Mbps; for a 4K stream, allow about 15–25 Mbps. These are planning estimates, not guarantees: compression, the service and picture quality change the requirement. A household with two 4K streams and ordinary browsing might start by considering 75–100 Mbps, then leave spare capacity for updates.'],
@@ -45,6 +46,11 @@ export const articles = [
  ['Test the rooms you use','A plan is only one link in the chain. If a bedroom receives a weak wireless signal, a bigger package may leave the same problem. Measure near the router and in the room, and compare a wired baseline. Solve coverage issues alongside capacity planning.'],
  ['Reassess with evidence','Start with a suitable plan if changing tiers is easy. Keep a week of notes about slowdowns and which tasks were happening. Upgrade when the evidence shows your capacity is repeatedly full, or when shorter transfers justify the price. If service is unreliable even at quiet times, ask the provider to resolve the fault first.'] ]}
 ];
+// Extra sections are inserted before each guide's final section so the closing advice stays last.
+export const articles = baseArticles.map(a=>{
+  const extra=guideExtraSections[a.slug]??[];
+  return {...a, sections:[...a.sections.slice(0,-1),...extra,...a.sections.slice(-1)] as string[][]};
+});
 export const pages: Record<string,{title:string;description:string;sections:[string,string][]}> = {
   "about": {
     "title": "A clearer picture of your connection.",
