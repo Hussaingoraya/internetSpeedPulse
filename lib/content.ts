@@ -1,3 +1,4 @@
+import {guideAuthor} from './author';
 import {newGuides} from './new-guides';
 import {guideExtraSections} from './guide-extra';
 export const origin = process.env.NEXT_PUBLIC_SITE_URL || 'https://internetspeedpulse.online';
@@ -53,27 +54,16 @@ export const articles = [...baseArticles.map(a=>{
   return {...a, sections:[...a.sections.slice(0,-1),...extra,...a.sections.slice(-1)] as string[][]};
 }), ...newGuides];
 export const pages: Record<string,{title:string;description:string;sections:[string,string][]}> = {
-  "about": {
-    "title": "A clearer picture of your connection.",
-    "description": "InternetSpeed Pulse is an independent speed test and guide resource operated by Hussain Aslam.",
-    "sections": [
-      [
-        "Who operates this site",
-        "InternetSpeed Pulse is published and operated by Hussain Aslam. For support, technical corrections or privacy enquiries, email info@duotools.online. No professional network-engineering credential, laboratory certification or provider partnership is claimed."
-      ],
-      [
-        "What the tool does",
-        "We measure actual browser requests to a selected destination and explain the results. A reading describes one device-to-server path at one time; it does not certify your provider’s service or measure a Wi-Fi radio link in isolation."
-      ],
-      [
-        "Independence",
-        "We are independent of Ookla, Cloudflare, LibreSpeed and internet providers. LibreSpeed supplies the open-source measurement engine under its license; this does not imply endorsement. The website is hosted on Hostinger."
-      ],
-      [
-        "Content and funding",
-        "Guides were prepared with AI assistance, checked against linked primary references, and maintained under our editorial policy. Illustrative examples are labeled. No original field research or customer tests are claimed. AdSense ownership verification is present, but ad delivery is disabled pending consent setup."
-      ]
-    ]
+  about: {
+    title: 'About InternetSpeed Pulse',
+    description: `Learn why InternetSpeed Pulse exists, how we test connections and how to contact operator ${guideAuthor.operator}.`,
+    sections: [
+      ['Who runs the site', `${guideAuthor.operator} operates InternetSpeed Pulse. ${guideAuthor.name} is the editorial publisher of the connection guides.`],
+      ['Why this site exists', 'InternetSpeed Pulse helps people work out why a connection feels slow and decide what to test next. The guides explain how to compare conditions, keep a useful record and share it with a provider if the problem persists.'],
+      ['How the test works', 'The browser transfers synthetic data to the selected measurement endpoint and reports download, upload, HTTP latency and jitter. Each result describes a particular device and path at a particular time. Hostinger hosts the website, and the open-source LibreSpeed engine powers the measurement. Cloudflare provides an optional test destination.'],
+      ['How we prepare guides', 'Guides are drafted and edited with AI assistance. We use primary documentation to check technical claims, label illustrative scenarios and calculations, and explain what each comparison can show. The editorial policy describes our sources and corrections process.'],
+      ['How to report a correction', 'Send the page URL, the statement you want us to check and any supporting source or reproduction steps. For a test problem, include the browser, server and test mode if you know them. Remove account details, passwords and public IP addresses before sharing a screenshot.'],
+    ],
   },
   "methodology": {
     "title": "Sustained measurements. Clear limitations.",

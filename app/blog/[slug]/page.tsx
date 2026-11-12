@@ -4,6 +4,7 @@ import {notFound} from 'next/navigation';
 import Art from '@/components/Art';
 import GuideReview from '@/components/GuideReview';
 import AdPlacement from '@/components/AdPlacement';
+import {guideAuthor} from '@/lib/author';
 import {articles,origin} from '@/lib/content';
 import {displayContentDate,getArticleDates} from '@/lib/content-dates';
 import {guideExamples} from '@/lib/guide-examples';
@@ -54,7 +55,7 @@ export default async function Article({params}:Props) {
  const articleSchema={
   '@context':'https://schema.org','@type':'Article',headline:guide.title,description:guide.description,
   mainEntityOfPage:url,
-  author:{'@type':'Organization',name:'InternetSpeed Pulse',url:`${origin}/about/`},
+  author:{'@type':guideAuthor.type,name:guideAuthor.name,url:origin+guideAuthor.profilePath},
   publisher:{'@type':'Organization',name:'InternetSpeed Pulse'},
   datePublished:published,dateModified:modified,
  };
@@ -70,7 +71,8 @@ export default async function Article({params}:Props) {
   <header className="article-header">
    <span className="eyebrow">{guide.category} · {readingMinutes(guide)} MIN READ</span>
    <h1>{guide.title}</h1><p>{guide.description}</p>
-   <div className="byline">InternetSpeed Pulse · Published <time dateTime={published}>{displayContentDate(published)}</time> · Updated <time dateTime={modified}>{displayContentDate(modified)}</time> · Publisher <Link href="/about/">Hussain Aslam</Link></div>
+   <div className="byline"><Link href={guideAuthor.profilePath}>{guideAuthor.name}</Link> · {guideAuthor.role} · Published <time dateTime={published}>{displayContentDate(published)}</time> · Updated <time dateTime={modified}>{displayContentDate(modified)}</time></div>
+   <p className="byline">Prepared with AI assistance. <Link href="/editorial-policy/">Editorial policy and corrections</Link></p>
   </header>
   <Art type={guide.art}/>
   <div className="article-body">

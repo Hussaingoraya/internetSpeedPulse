@@ -68,3 +68,7 @@ Ad delivery is disabled pending an actual published certified CMP. The AdSense a
 First-party endpoints reserve payload against a default 10 GB/hour per-process allowance. Set runtime MEASUREMENT_HOURLY_BYTES to a nonnegative integer to change it, or MEASUREMENT_ENABLED=false to disable first-party transfers. Restarts/multiple processes are separate; use Hostinger/WAF controls and monitor account limits. These are not distributed or monthly cost guarantees. API traffic is uncached, size bounded and upload reads time out after 15 seconds.
 
 Engine ID librespeed-bounded-v2 distinguishes changed limits from earlier tests. Keep the same server, mode and version for comparisons. Local browser QA verifies behavior, not an ISP's line speed. Run npm test, npm run build, and node scripts/check-seo.mjs after changes.
+
+## Publisher details
+
+Confirm that `info@duotools.online` receives mail before publishing the expanded About page. It is the current contact address on a different domain. The guide byline uses the site as editorial publisher, and the About page identifies Hussain Aslam as operator. Replace the empty operator bio in `lib/author.ts` with an approved short bio when available.
