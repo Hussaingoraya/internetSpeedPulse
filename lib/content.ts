@@ -1,4 +1,5 @@
 import {guideAuthor} from './author';
+import {troubleshootingGuides} from './troubleshooting-guides';
 import {newGuides} from './new-guides';
 import {guideExtraSections} from './guide-extra';
 export const origin = process.env.NEXT_PUBLIC_SITE_URL || 'https://internetspeedpulse.online';
@@ -52,7 +53,7 @@ const baseArticles = [
 export const articles = [...baseArticles.map(a=>{
   const extra=guideExtraSections[a.slug]??[];
   return {...a, sections:[...a.sections.slice(0,-1),...extra,...a.sections.slice(-1)] as string[][]};
-}), ...newGuides];
+}), ...newGuides, ...troubleshootingGuides];
 export const pages: Record<string,{title:string;description:string;sections:[string,string][]}> = {
   about: {
     title: 'About InternetSpeed Pulse',

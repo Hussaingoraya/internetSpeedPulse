@@ -3,6 +3,8 @@ const broadband = {label:'Ofcom practical broadband testing guidance',url:'https
 const cloudflare = {label:'Cloudflare connection speed testing documentation',url:'https://developers.cloudflare.com/fundamentals/performance/test-speed/'};
 
 export const newGuideSources: Record<string, {label:string; url:string}[]> = {
+ 'internet-slow-at-night': [broadband],
+ 'internet-keeps-disconnecting': [{label:'Microsoft Wi-Fi connection troubleshooting',url:'https://support.microsoft.com/en-us/windows/experience/connectivity-networking/fix-wi-fi-connection-issues-in-windows'}],
  'wifi-bands-24-5-6-ghz': [appleWiFi],
  'does-vpn-slow-internet': [{label:'Microsoft documentation on VPN routing',url:'https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/vpn/vpn-routing'}],
  'why-speed-tests-differ': [cloudflare],
