@@ -11,13 +11,70 @@ function position(fraction:number,radius:number){const angle=(135+fraction*270)*
 function fractionFor(value:number,max:number){const scaled=value/max*1000;if(scaled<=0)return 0;if(scaled>=1000)return 1;const i=marks.findIndex(n=>n>=scaled);return ((i-1)+(scaled-marks[i-1])/(marks[i]-marks[i-1]))/(marks.length-1);}
 function short(value:number){return value>=1000?`${Number((value/1000).toFixed(1))}k`:Number(value.toFixed(1)).toString();}
 export default function AnimatedSpeedometer({value,unit,phase,running,stage,locale}:Props){
- const id=useId().replaceAll(':','');const reduced=useRef(false);const target=useRef(0);const motion=useRef(0);const lastFrame=useRef<number|null>(null);const [shown,setShown]=useState(0);const [max,setMax]=useState(1000);const [motionPreference,setMotionPreference]=useState<'on'|'off'>('on');
- const converted=value===null?null:unit==='MB/s'?value/8:value;const upload=phase==='upload';const waiting=running&&(phase==='connecting'||phase==='latency'||converted===null||converted===0);
- const reduceMotion=motionPreference==='off';reduced.current=reduceMotion;
- useEffect(()=>{try{const saved=localStorage.getItem('pulse-meter-motion');if(saved==='off'||(!saved&&window.matchMedia('(prefers-reduced-motion: reduce)').matches))setMotionPreference('off');}catch{}},[]);
- useEffect(()=>{if(phase==='ready'||phase==='connecting')setMax(1000);if(converted!==null&&converted>max)setMax(converted<=5000?5000:1000*Math.pow(10,Math.ceil(Math.log10(converted/1000))));},[converted,phase,max]);
- useEffect(()=>{target.current=converted??0;let frame=0;lastFrame.current=null;const tick=(time:number)=>{if(reduced.current){motion.current=target.current;setShown(target.current);return;}const elapsed=lastFrame.current===null?16:Math.min(64,time-lastFrame.current);lastFrame.current=time;motion.current+=(target.current-motion.current)*(1-Math.exp(-elapsed/110));if(Math.abs(target.current-motion.current)<.025){motion.current=target.current;setShown(target.current);return;}setShown(motion.current);frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(tick);return()=>cancelAnimationFrame(frame);},[converted,reduceMotion]);
- const fraction=fractionFor(shown,max);const angle=-135+fraction*270;const start=position(0,166),end=position(1,166);const path=`M ${start.x} ${start.y} A 166 166 0 1 1 ${end.x} ${end.y}`;
+ const id=useId().replaceAll(':','');
+ const target=useRef(0);
+ const frame=useRef<number|null>(null);
+ const positionRef=useRef(0);
+ const lastFrame=useRef<number|null>(null);
+ const [animatedFraction,setAnimatedFraction]=useState(0);
+ const [max,setMax]=useState(1000);
+ const [motionPreference,setMotionPreference]=useState<'on'|'off'>('on');
+ const converted=value===null?null:unit==='MB/s'?value/8:value;
+ const upload=phase==='upload';
+ const waiting=running&&(phase==='connecting'||phase==='latency'||converted===null||converted===0);
+ const reduceMotion=motionPreference==='off';
+
+ useEffect(()=>{
+  try{
+   const saved=localStorage.getItem('pulse-meter-motion');
+   if(saved==='off'||(!saved&&window.matchMedia('(prefers-reduced-motion: reduce)').matches))setMotionPreference('off');
+  }catch{}
+  return ()=>{if(frame.current!==null)cancelAnimationFrame(frame.current);frame.current=null;lastFrame.current=null;};
+ },[]);
+
+ useEffect(()=>{
+  if(phase==='ready'||phase==='connecting')setMax(1000);
+  else if(converted!==null&&converted>max){
+   setMax(converted<=5000?5000:1000*Math.pow(10,Math.ceil(Math.log10(converted/1000))));
+  }
+ },[converted,phase,max]);
+
+ useEffect(()=>{
+  // Keep the needle steady between phases until that direction has a sample.
+  if(converted!==null)target.current=fractionFor(converted,max);
+  else if(phase!=='download'&&phase!=='upload')target.current=0;
+
+  if(reduceMotion){
+   if(frame.current!==null)cancelAnimationFrame(frame.current);
+   frame.current=null;
+   lastFrame.current=null;
+   positionRef.current=target.current;
+   setAnimatedFraction(target.current);
+   return;
+  }
+  if(frame.current!==null||positionRef.current===target.current)return;
+
+  const tick=(time:number)=>{
+   const elapsed=lastFrame.current===null?16:Math.min(48,time-lastFrame.current);
+   lastFrame.current=time;
+   const remaining=target.current-positionRef.current;
+   positionRef.current+=remaining*(1-Math.exp(-elapsed/135));
+   if(Math.abs(target.current-positionRef.current)<0.00025){
+    positionRef.current=target.current;
+    frame.current=null;
+    lastFrame.current=null;
+   }else{
+    frame.current=requestAnimationFrame(tick);
+   }
+   setAnimatedFraction(positionRef.current);
+  };
+  frame.current=requestAnimationFrame(tick);
+ },[converted,max,phase,reduceMotion]);
+
+ const fraction=reduceMotion&&converted!==null?fractionFor(converted,max):animatedFraction;
+ const angle=-135+fraction*270;
+ const start=position(0,166),end=position(1,166);
+ const path=`M ${start.x} ${start.y} A 166 166 0 1 1 ${end.x} ${end.y}`;
  const ticks=useMemo(()=>Array.from({length:81},(_,i)=>{const f=i/80;return {f,major:i%10===0,start:position(f,i%10===0?145:151),end:position(f,157)};}),[]);
  const label=value===null?'—':`${converted!.toFixed(1)} ${unit}`;const Icon=phase==='complete'?Check:upload?ArrowUp:running?ArrowDown:Radio;
  return <div className={`animated-meter ${upload?'meter-upload':'meter-download'} ${running?'meter-running':''} ${waiting?'meter-waiting':''} ${phase==='complete'?'meter-complete':''}`} data-motion={reduceMotion?'off':'on'} style={{'--meter-angle':`${angle}deg`,'--meter-fill':fraction} as CSSProperties} role="group" aria-label={`${stage}: ${label}`}>
@@ -43,7 +100,7 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
    </g>
    <circle cx="210" cy="190" r="12" className="meter-hub-outer"/><circle cx="210" cy="190" r="5" className="meter-hub"/>
   </svg>
-  <div className="meter-readout" aria-hidden="true"><span className="meter-stage"><i/>{stage}</span><strong>{waiting||value===null?'—':shown.toFixed(1)}</strong><span className="meter-unit"><Icon size={15}/>{unit}</span></div>
+  <div className="meter-readout" aria-hidden="true"><span className="meter-stage"><i/>{stage}</span><strong>{waiting||converted===null?'—':converted.toFixed(1)}</strong><span className="meter-unit"><Icon size={15}/>{unit}</span></div>
   <button className="meter-motion-toggle" aria-pressed={!reduceMotion} onClick={()=>{const next=reduceMotion?'on':'off';setMotionPreference(next);try{localStorage.setItem('pulse-meter-motion',next);}catch{}}}>{motionLabels[locale][reduceMotion?0:1]}</button>
  </div>;
 }

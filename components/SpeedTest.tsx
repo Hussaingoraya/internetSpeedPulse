@@ -53,20 +53,28 @@ export default function SpeedTest({locale='en',dictionary=en}:{locale?:Locale;di
  async function copy(){try{await navigator.clipboard.writeText(`InternetSpeed Pulse\n ${downLabel}: ${result.download?.toFixed(2)} Mbps\n${upLabel}: ${result.upload?.toFixed(2)} Mbps\n${idle}: ${num(result.ping)} ms\n${jitter}: ${num(result.jitter)} ms\n${serverLabel}: ${result.server}\n${result.mode==='single'?single:multi}\n${result.date}`);setCopied(true);setTimeout(()=>setCopied(false),2000);}catch{setMessage(locale==='en'?'Clipboard is unavailable. Use Download CSV to keep this result.':csv);}}
  const metrics=[{key:'download',icon:ArrowDown},{key:'upload',icon:ArrowUp},{key:'ping',icon:Activity},{key:'jitter',icon:Radio}] as const;const display=phase==='upload'?result.upload:result.download;const completed=phase==='complete';
  useEffect(()=>{const pause=()=>{if(document.hidden&&controller.current){runId.current++;controller.current.abort();controller.current=null;setRunning(false);setPhase('stopped');setMessage(locale==='en'?'Test stopped because this tab was hidden. Keep the tab visible for reliable timings. Partial results are not saved.':stopped);}};document.addEventListener('visibilitychange',pause);return()=>document.removeEventListener('visibilitychange',pause);},[]);
+ const resultHeading=useRef<HTMLHeadingElement>(null);
+ useEffect(()=>{if(completed)resultHeading.current?.focus({preventScroll:true});},[completed]);
  const labels=[downLabel,upLabel,idle,jitter];
  return <div className="test-experience" lang={locale} dir={direction(locale)}>
   <p className="data-warning" id="test-data-warning">ⓘ {data} <Link href="/methodology/">{nav[3]}</Link></p>
-  <section className="test-panel" aria-label={nav[1]}>
+  <section className={completed?"test-panel test-panel-complete":"test-panel"} aria-label={nav[1]}>
    <div className="panel-top"><span><i className={running?'status-dot active':'status-dot'}/>{nav[1]}</span><span className="powered"><Zap size={13}/>{serverLabel} · <bdi>{selected.name}</bdi></span></div>
-   <div className="test-main">
+   {completed?<header className="test-result-header">
+    <div className="test-result-title">
+     <span className="test-result-check"><Check size={22} aria-hidden="true"/></span>
+     <h2 ref={resultHeading} tabIndex={-1}>{complete}</h2>
+    </div>
+    <button type="button" className="test-result-retest" aria-describedby="test-data-warning" onClick={start}>{again}<ArrowUpRight size={17} aria-hidden="true"/></button>
+   </header>:<div className="test-main">
     <AnimatedSpeedometer value={display} unit={prefs.unit} phase={phase} running={running} stage={phaseLabels[phase]} locale={locale}/>
     <div className="start-area">
      <span className="phase" role="status" aria-live="polite">{phaseLabels[phase]}</span>
      {running&&<progress className="test-progress" value={progress} max={1} aria-label={phaseLabels[phase]}/>}
-     <button className="start-button" aria-describedby="test-data-warning" onClick={running?stop:start}>{running?stopLabel:completed?again:startLabel}<ArrowUpRight size={20}/></button>
+     <button className="start-button" aria-describedby="test-data-warning" onClick={running?stop:start}>{running?stopLabel:startLabel}<ArrowUpRight size={20}/></button>
     </div>
-   </div>
-   <div className="metrics">{metrics.map((m,i)=><div className="metric" key={m.key}><span><m.icon size={16}/>{labels[i]}</span><strong>{num(result[m.key],i<2)}<small>{i<2?prefs.unit:'ms'}</small></strong></div>)}</div>
+   </div>}
+   <div className="metrics">{metrics.map((m,i)=><div className="metric" key={m.key}><span><m.icon size={16}/>{labels[i]}</span><strong>{num(result[m.key],i<2)}<small>{result[m.key]===null?'':i<2?prefs.unit:'ms'}</small></strong></div>)}</div>
    {(running||completed)&&<TransferChart points={points} labels={[downLabel,upLabel]}/>}
    <div className="latency-comparison">
     <span>{idle} <strong><bdi>{num(result.ping)} ms</bdi></strong></span>
@@ -88,19 +96,19 @@ export default function SpeedTest({locale='en',dictionary=en}:{locale?:Locale;di
     <button disabled={running} aria-pressed={prefs.mode==='multi'} onClick={()=>setPrefs({mode:'multi'})}>{multi}<small>4</small></button>
     <button disabled={running} aria-pressed={prefs.mode==='single'} onClick={()=>setPrefs({mode:'single'})}>{single}<small>1</small></button>
    </div></div>
+   {completed&&<div className="result-actions test-result-actions">
+    <button type="button" onClick={copy}>{copied?<Check size={16}/>:<Copy size={16}/>} {copied?copiedLabel:copyLabel}</button>
+    <button type="button" onClick={()=>downloadCSV([result])}><Download size={16}/>{csv}</button>
+   </div>}
    <div className="test-bottom"><Link href="/methodology/">{nav[3]}<ArrowUpRight size={13}/></Link></div>
   </section>
   <div className="test-disclosure"><p><Link href="/privacy/">{nav[5]}</Link></p></div>
-  {completed&&<p className="notice" role="status">{complete} · {downLabel}: <bdi>{num(result.download,true)} {prefs.unit}</bdi> · {upLabel}: <bdi>{num(result.upload,true)} {prefs.unit}</bdi> · {idle}: <bdi>{num(result.ping)} ms</bdi> · {jitter}: <bdi>{num(result.jitter)} ms</bdi></p>}
   {message&&<p className="notice" role={phase==='error'?'alert':'status'}>{message}</p>}
   {completed&&locale==='en'&&<nav className="result-guides" aria-label="Speed test troubleshooting guides">
    <Link href="/blog/how-to-test-internet-speed/">How to retest your internet speed <ArrowUpRight size={13} aria-hidden="true"/></Link>
    <Link href="/blog/why-is-my-wifi-so-slow/">Compare Wi-Fi and Ethernet speeds <ArrowUpRight size={13} aria-hidden="true"/></Link>
   </nav>}
-  <div className="history-controls"><label><input type="checkbox" checked={save} onChange={toggle}/>{remember}</label><div className="result-actions">
-   <button disabled={!completed} onClick={copy}>{copied?<Check size={14}/>:<Copy size={14}/>} {copied?copiedLabel:copyLabel}</button>
-   <button disabled={!completed} onClick={()=>downloadCSV([result])}><Download size={14}/>{csv}</button>
-  </div></div>
+  <div className="history-controls"><label><input type="checkbox" checked={save} onChange={toggle}/>{remember}</label></div>
   <p className="engine-credit"><a href="/vendor/librespeed/speedtest_worker.js">LibreSpeed</a> · <a href="/vendor/librespeed/LICENSE.txt">LGPLv3</a> · <a href="/vendor/librespeed/GPL-3.0.txt">GPLv3</a></p>
   <Link href="/history/" className="history-link">{history} ↗</Link>
   <dialog ref={dialog} className="server-dialog" onCancel={()=>setShowServers(false)} onClose={()=>{setShowServers(false);serverTrigger.current?.focus();}} aria-labelledby="server-title">
