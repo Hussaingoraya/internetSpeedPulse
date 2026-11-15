@@ -2,6 +2,21 @@ import type {NewGuide} from './new-guides';
 
 export const troubleshootingGuides: NewGuide[] = [
  {
+  slug:'wifi-connected-no-internet', title:'Wi-Fi connected but no internet? What to check',
+  searchTitle:'Wi-Fi Connected but No Internet?', category:'TROUBLESHOOTING', art:'wifi',
+  description:'Check whether a connected Wi-Fi device is behind a sign-in page, has an address problem, or has lost access beyond the router.',
+  tool:{href:'/help/',label:'Get help if your speed test cannot start'},
+  related:['internet-keeps-disconnecting','ethernet-vs-wifi','why-is-my-wifi-so-slow'],
+  sections:[
+   ['Check whether the warning matches what you can open','A connected Wi-Fi icon means your device joined the wireless network. Try two unrelated sites in the browser and check whether other apps work. If websites work despite the warning, the operating system’s connectivity check may have failed on its own. If only one site fails, record the address and error before changing any network settings.'],
+   ['Look for a sign-in prompt on guest Wi-Fi','A hotel, airport or café network may need you to accept terms or sign in before it allows internet traffic. Verify the network name with the venue and look for your device’s sign-in notification. Disconnect if you cannot verify the network or if the page asks you to ignore a certificate warning. On a managed device, consult IT if the sign-in step is blocked.'],
+   ['Compare another device on the same network','Try the same sites on a second device connected to the same Wi-Fi network. On a phone, temporarily turn off cellular data so it cannot quietly provide the connection. If both devices fail, check Ethernet if available and look for an outage on the provider’s status page using a separate connection. If only one device fails, reconnect that device and inspect its network details before restarting the router.'],
+   ['Check the device address and name lookup','On Windows, run ipconfig in Command Prompt and inspect the Wi-Fi adapter. On a typical home network, a 169.254.x.x IPv4 address with no default gateway suggests the device did not receive its usual IPv4 settings. Compare with a working device and check that automatic addressing is configured if your network uses it. If the address and gateway look normal, try nslookup example.com. A failed lookup across several domains can point to a DNS problem, although browser DNS settings and VPNs can make browser behavior differ. Keep any required work settings in place and share the error with IT.'],
+   ['Illustrative example','A guest laptop shows connected, but two websites fail. A phone on the same network also fails with mobile data disabled. The venue confirms the network name, and both devices work after completing the guest sign-in page. In this illustrative case, the fastest next check was the portal, because both devices could join Wi-Fi and needed the same access step.'],
+   ['When is a speed test useful?','Once ordinary pages load, a speed test can help if the connection still feels slow. If access comes and goes, record when it fails and which devices are affected. Report a recurring loss of access with those observations, even if a test after recovery shows normal throughput.'],
+  ],
+ },
+ {
   slug:'internet-slow-at-night', title:'Why is my internet slow at night?', searchTitle:'Why Is My Internet Slow at Night?',
   category:'TROUBLESHOOTING', art:'test',
   description:'Compare daytime and evening speeds to narrow down household traffic, Wi-Fi problems and wider connection slowdowns.',

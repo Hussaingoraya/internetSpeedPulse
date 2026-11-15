@@ -13,7 +13,7 @@ const relatedPages: Record<string, [string, string][]> = {
  methodology: [['/servers/','Compare measurement servers'],['/blog/why-speed-tests-differ/','Why speed test results differ']],
  servers: [['/methodology/','How we select and measure servers'],['/blog/why-speed-tests-differ/','Why results vary by destination']],
  tools: [['/blog/mbps-vs-mbs/','Convert Mbps to MB/s'],['/blog/how-much-internet-speed-do-i-need/','Estimate household bandwidth needs']],
- help: [['/blog/internet-keeps-disconnecting/','Diagnose recurring disconnects'],['/blog/internet-slow-at-night/','Investigate evening slowdowns']],
+ help: [['/blog/wifi-connected-no-internet/','Fix Wi-Fi that connects without internet access'],['/blog/internet-keeps-disconnecting/','Diagnose recurring disconnects'],['/blog/internet-slow-at-night/','Investigate evening slowdowns']],
  faq: [['/help/','Troubleshoot an incomplete test'],['/blog/how-to-test-internet-speed/','Run a repeatable test']],
  history: [['/blog/speed-test-evidence-for-provider/','Prepare your results for provider support']],
  settings: [['/methodology/','Understand test modes and data limits'],['/privacy/','Read how preferences and results are stored']],
