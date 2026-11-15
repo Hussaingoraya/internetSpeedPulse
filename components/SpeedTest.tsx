@@ -70,6 +70,7 @@ export default function SpeedTest({locale='en',dictionary=en}:{locale?:Locale;di
     <AnimatedSpeedometer value={display} unit={prefs.unit} phase={phase} running={running} stage={phaseLabels[phase]} locale={locale}/>
     <div className="start-area">
      <span className="phase" role="status" aria-live="polite">{phaseLabels[phase]}</span>
+     {phase==='error'&&message&&<p role="alert">{message}</p>}
      {running&&<progress className="test-progress" value={progress} max={1} aria-label={phaseLabels[phase]}/>}
      <button className="start-button" aria-describedby="test-data-warning" onClick={running?stop:start}>{running?stopLabel:startLabel}<ArrowUpRight size={20}/></button>
     </div>
@@ -105,7 +106,7 @@ export default function SpeedTest({locale='en',dictionary=en}:{locale?:Locale;di
    <div className="test-bottom"><Link href="/methodology/">{nav[3]}<ArrowUpRight size={13}/></Link></div>
   </section>
   <div className="test-disclosure"><p><Link href="/privacy/">{nav[5]}</Link></p></div>
-  {message&&<p className="notice" role={phase==='error'?'alert':'status'}>{message}</p>}
+  {message&&phase!=='error'&&<p className="notice" role="status">{message}</p>}
   {completed&&locale==='en'&&<nav className="result-guides" aria-label="Speed test troubleshooting guides">
    <Link href="/blog/how-to-test-internet-speed/">How to retest your internet speed <ArrowUpRight size={13} aria-hidden="true"/></Link>
    <Link href="/blog/why-is-my-wifi-so-slow/">Compare Wi-Fi and Ethernet speeds <ArrowUpRight size={13} aria-hidden="true"/></Link>

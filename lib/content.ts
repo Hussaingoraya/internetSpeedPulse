@@ -84,7 +84,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Payloads and safeguards",
-        "Downloads adapt between 1 and 8 MB per request. Upload bodies are 4 MiB. The worker reserves at most 512 MB of requested payload per direction, including warm-up. If another request would exceed that budget, it stops as incomplete rather than publishing a shortened result. The combined payload can approach 1.024 GB plus a small preflight and protocol overhead. The warning rounds this to roughly 1.1 GB plus network overhead; it is not a billing guarantee. Fast links may reach the budget before a complete result."
+        "Downloads adapt between 1 and 8 MB per request. Upload bodies are 4 MiB in Single mode and 1 MiB per request in Multi mode. The worker reserves at most 512 MB of requested payload per direction, including warm-up. If another request would exceed that budget, it stops as incomplete rather than publishing a shortened result. The combined payload can approach 1.024 GB plus a small preflight and protocol overhead. The warning rounds this to roughly 1.1 GB plus network overhead; it is not a billing guarantee. Fast links may reach the budget before a complete result."
       ],
       [
         "Timeouts, cancellation and failures",
