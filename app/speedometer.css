@@ -26,3 +26,6 @@
 .test-panel-complete .latency-comparison{flex-wrap:wrap}
 .test-result-actions{display:flex;flex-wrap:wrap;gap:8px;padding:12px clamp(12px,3vw,32px)}
 @media(max-width:640px){.test-panel-complete .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.test-result-header{padding:16px}.test-panel-complete .metric{padding:9px}}
+/* The opening sweep is a loading cue. The scale returns when live samples arrive. */
+.meter-scale{transition:opacity .2s ease}
+.meter-waiting .meter-scale{opacity:.34}

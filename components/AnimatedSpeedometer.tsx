@@ -16,6 +16,8 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
  const frame=useRef<number|null>(null);
  const positionRef=useRef(0);
  const lastFrame=useRef<number|null>(null);
+ const sweepStarted=useRef<number|null>(null);
+ const sweeping=useRef(false);
  const [animatedFraction,setAnimatedFraction]=useState(0);
  const [max,setMax]=useState(1000);
  const [motionPreference,setMotionPreference]=useState<'on'|'off'>('on');
@@ -40,9 +42,10 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
  },[converted,phase,max]);
 
  useEffect(()=>{
-  // Keep the needle steady between phases until that direction has a sample.
-  if(converted!==null)target.current=fractionFor(converted,max);
-  else if(phase!=='download'&&phase!=='upload')target.current=0;
+  // Use a loading sweep while the readout is blank. Both modes share the same needle position.
+  sweeping.current=waiting&&!reduceMotion;
+  if(!sweeping.current)sweepStarted.current=null;
+  target.current=waiting||converted===null?0:fractionFor(converted,max);
 
   if(reduceMotion){
    if(frame.current!==null)cancelAnimationFrame(frame.current);
@@ -52,15 +55,20 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
    setAnimatedFraction(target.current);
    return;
   }
-  if(frame.current!==null||positionRef.current===target.current)return;
+  if(frame.current!==null||(!sweeping.current&&positionRef.current===target.current))return;
 
   const tick=(time:number)=>{
    const elapsed=lastFrame.current===null?16:Math.min(48,time-lastFrame.current);
    lastFrame.current=time;
-   const remaining=target.current-positionRef.current;
-   positionRef.current+=remaining*(1-Math.exp(-elapsed/135));
-   if(Math.abs(target.current-positionRef.current)<0.00025){
-    positionRef.current=target.current;
+   let destination=target.current;
+   if(sweeping.current){
+    sweepStarted.current??=time;
+    const cycle=(time-sweepStarted.current)/1750;
+    destination=0.74*(1-Math.cos(cycle*2*Math.PI))/2;
+   }
+   positionRef.current+=(destination-positionRef.current)*(1-Math.exp(-elapsed/135));
+   if(!sweeping.current&&Math.abs(destination-positionRef.current)<0.00025){
+    positionRef.current=destination;
     frame.current=null;
     lastFrame.current=null;
    }else{
@@ -69,14 +77,14 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
    setAnimatedFraction(positionRef.current);
   };
   frame.current=requestAnimationFrame(tick);
- },[converted,max,phase,reduceMotion]);
+ },[converted,max,reduceMotion,waiting]);
 
  const fraction=reduceMotion&&converted!==null?fractionFor(converted,max):animatedFraction;
  const angle=-135+fraction*270;
  const start=position(0,166),end=position(1,166);
  const path=`M ${start.x} ${start.y} A 166 166 0 1 1 ${end.x} ${end.y}`;
  const ticks=useMemo(()=>Array.from({length:81},(_,i)=>{const f=i/80;return {f,major:i%10===0,start:position(f,i%10===0?145:151),end:position(f,157)};}),[]);
- const label=value===null?'—':`${converted!.toFixed(1)} ${unit}`;const Icon=phase==='complete'?Check:upload?ArrowUp:running?ArrowDown:Radio;
+ const label=waiting||converted===null?'—':`${converted.toFixed(1)} ${unit}`;const Icon=phase==='complete'?Check:upload?ArrowUp:running?ArrowDown:Radio;
  return <div className={`animated-meter ${upload?'meter-upload':'meter-download'} ${running?'meter-running':''} ${waiting?'meter-waiting':''} ${phase==='complete'?'meter-complete':''}`} data-motion={reduceMotion?'off':'on'} style={{'--meter-angle':`${angle}deg`,'--meter-fill':fraction} as CSSProperties} role="group" aria-label={`${stage}: ${label}`}>
   <div className="meter-aura" aria-hidden="true"/>
   <svg className="meter-dial" viewBox="0 0 420 370" aria-hidden="true">
@@ -92,7 +100,7 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
    <path d={path} className="meter-arc" fill="none" stroke={`url(#${id}-arc)`} strokeWidth="19" strokeLinecap="round" pathLength="100" strokeDasharray={`${fraction*100} 100`}/>
    <path d={path} className="meter-loading-arc" fill="none" stroke={`url(#${id}-arc)`} strokeWidth="19" strokeLinecap="round" pathLength="100" strokeDasharray="13 87"/>
    <path d={`M ${position(0,137).x} ${position(0,137).y} A 137 137 0 1 1 ${position(1,137).x} ${position(1,137).y}`} fill="none" stroke="#687889" strokeOpacity=".18" strokeWidth="1"/>
-   {ticks.map((tick,i)=><line key={i} x1={tick.start.x} y1={tick.start.y} x2={tick.end.x} y2={tick.end.y} className={`meter-tick ${tick.major?'major':''} ${tick.f<=fraction&&value!==null?'lit':''}`} strokeWidth={tick.major?1.8:1} strokeLinecap="round"/>)}
+   {ticks.map((tick,i)=><line key={i} x1={tick.start.x} y1={tick.start.y} x2={tick.end.x} y2={tick.end.y} className={`meter-tick ${tick.major?'major':''} ${tick.f<=fraction&&!waiting&&converted!==null?'lit':''}`} strokeWidth={tick.major?1.8:1} strokeLinecap="round"/>)}
    {marks.map((mark,i)=>{const point=position(i/8,128);return <text key={mark} x={point.x} y={point.y} dy=".35em" textAnchor="middle" className="meter-scale">{short(mark*max/1000)}</text>;})}
    <g className="meter-needle" style={{transformOrigin:'210px 190px',transform:`rotate(${angle}deg)`}}>
     <path d="M 206 196 L 207.8 92 Q 210 82 212.2 92 L 214 196 Z" fill={`url(#${id}-needle)`}/>
