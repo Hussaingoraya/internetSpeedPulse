@@ -1,0 +1,16 @@
+import en from './en';
+import ar from './ar';
+import ur from './ur';
+import hi from './hi';
+import es from './es';
+import fr from './fr';
+import de from './de';
+import pt from './pt';
+import tr from './tr';
+import id from './id';
+import ru from './ru';
+import zh from './zh';
+import ja from './ja';
+import type {Locale} from '../locales';
+import type {Dictionary} from './types';
+export const dictionaries: Record<Locale, Dictionary> = {en, ar, ur, hi, es, fr, de, pt, tr, id, ru, zh, ja};

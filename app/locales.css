@@ -1,0 +1,18 @@
+.locale-menu{position:relative;flex:none}
+.locale-menu summary{cursor:pointer;padding:.65rem;white-space:nowrap}
+.locale-menu ul{position:absolute;inset-inline-end:0;top:100%;z-index:30;min-width:10rem;max-height:65vh;overflow:auto;list-style:none;margin:0;padding:.35rem;background:var(--paper,#fff);color:var(--ink);border:1px solid var(--line,#bbb);border-radius:.5rem}
+.locale-menu a{display:block;padding:.55rem .75rem}
+.locale-menu a[aria-current]{font-weight:700;text-decoration:underline}
+.localized-nav,.localized-nav nav,.localized-footer nav{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem}
+.localized-nav{justify-content:space-between}
+.localized-footer{padding:2rem max(1rem,calc((100vw - 1100px)/2))}
+.localized-footer p{margin-block-start:1rem}
+[dir=rtl] .test-disclosure,[dir=rtl] .data-warning,[dir=rtl] .server-option,[dir=rtl] .explain-card,[dir=rtl] .landing-copy{text-align:start}
+[dir=rtl] .connection-item,[dir=rtl] .server-option{direction:rtl}
+.test-experience .metric strong,.test-experience .animated-meter{direction:ltr}
+.test-experience .metric span,.test-experience .latency-comparison span{overflow-wrap:anywhere}
+.localized-home .intro h1{overflow-wrap:anywhere}
+.localized-home .faq summary{gap:1rem}
+.landing-copy{max-width:74ch;margin:2rem auto}
+.specialized-links{display:flex;flex-wrap:wrap;gap:1rem;margin-block:1.5rem}
+.specialized-links a{text-decoration:underline}

@@ -72,7 +72,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
     "sections": [
       [
         "Before you start",
-        "Only pressing Start begins transfer testing. Provider metadata is requested separately when the page opens. A typical full run takes about 35 seconds. The 75-second overall deadline includes selection and preflight checks. Keep the tab visible: hiding it stops the run so browser throttling does not silently distort timings."
+        "Only pressing Start begins transfer testing. The browser requests the network provider label separately when the page opens. A typical full run takes about 35 seconds. The 75-second overall deadline includes selection and preflight checks. Keep the tab visible: hiding it stops the run so browser throttling does not silently distort timings."
       ],
       [
         "Measurement engine and selection",
@@ -108,7 +108,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Provider metadata",
-        "Hostinger currently supplies no usable ISP metadata to this application, so provider and IP details may be unavailable. We do not infer a provider from the selected test server or contact an external IP lookup vendor. When trustworthy hosting metadata is available it can describe a VPN or corporate network rather than the billing provider."
+        "The provider is identified from hosting metadata or a short DNS lookup through Team Cymru when the host supplies a visitor IP. The provider label can describe a VPN or corporate network. The test server is shown separately, and the browser receives no visitor IP from the provider lookup."
       ]
     ]
   },
@@ -138,7 +138,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Browser storage",
-        "The site uses localStorage for theme, units, language, server, mode and meter-motion preferences. Optional completed-result history is off by default, stores up to ten results, and excludes IP and provider details. Turning off Remember results removes history. Clear history removes measurements, while browser site-data controls can remove all stored preferences. There is no cross-device account synchronization."
+        "The site uses localStorage for theme, units, server, mode and meter-motion preferences. The page URL determines the display language. Provider detection uses metadata supplied by the hosting proxy or a DNS lookup through Team Cymru based on the visitor’s IP. The lookup response contains the network name and ASN, without the IP. A VPN may cause the label to describe the VPN network. Optional completed-result history is off by default, stores up to ten results, and excludes IP and provider details. Turning off Remember results removes history. Clear history removes measurements, while browser site-data controls can remove all stored preferences. There is no cross-device account synchronization."
       ],
       [
         "Fonts and external links",

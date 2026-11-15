@@ -1,24 +1,24 @@
 'use client';
 import {useEffect,useId,useMemo,useRef,useState,type CSSProperties} from 'react';
 import {ArrowDown,ArrowUp,Check,Radio} from 'lucide-react';
+import type {Locale} from '@/src/i18n/locales';
 import {type Phase} from '@/lib/measure';
 
 type MeterPhase=Phase|'ready'|'complete'|'stopped'|'error';
-type Props={value:number|null;unit:'Mbps'|'MB/s';phase:MeterPhase;running:boolean;language:'en'|'ar'};
+type Props={value:number|null;unit:'Mbps'|'MB/s';phase:MeterPhase;running:boolean;stage:string;locale:Locale};
 const marks=[0,5,10,50,100,250,500,750,1000];
 function position(fraction:number,radius:number){const angle=(135+fraction*270)*Math.PI/180;return {x:210+Math.cos(angle)*radius,y:190+Math.sin(angle)*radius};}
 function fractionFor(value:number,max:number){const scaled=value/max*1000;if(scaled<=0)return 0;if(scaled>=1000)return 1;const i=marks.findIndex(n=>n>=scaled);return ((i-1)+(scaled-marks[i-1])/(marks[i]-marks[i-1]))/(marks.length-1);}
 function short(value:number){return value>=1000?`${Number((value/1000).toFixed(1))}k`:Number(value.toFixed(1)).toString();}
-export default function AnimatedSpeedometer({value,unit,phase,running,language}:Props){
+export default function AnimatedSpeedometer({value,unit,phase,running,stage,locale}:Props){
  const id=useId().replaceAll(':','');const reduced=useRef(false);const target=useRef(0);const motion=useRef(0);const lastFrame=useRef<number|null>(null);const [shown,setShown]=useState(0);const [max,setMax]=useState(1000);const [motionPreference,setMotionPreference]=useState<'on'|'off'>('on');
- const converted=value===null?null:unit==='MB/s'?value/8:value;const upload=phase==='upload';const waiting=running&&(phase==='connecting'||phase==='latency'||converted===null||converted===0);const arabic=language==='ar';
+ const converted=value===null?null:unit==='MB/s'?value/8:value;const upload=phase==='upload';const waiting=running&&(phase==='connecting'||phase==='latency'||converted===null||converted===0);
  const reduceMotion=motionPreference==='off';reduced.current=reduceMotion;
  useEffect(()=>{try{const saved=localStorage.getItem('pulse-meter-motion');if(saved==='off'||(!saved&&window.matchMedia('(prefers-reduced-motion: reduce)').matches))setMotionPreference('off');}catch{}},[]);
  useEffect(()=>{if(phase==='ready'||phase==='connecting')setMax(1000);if(converted!==null&&converted>max)setMax(converted<=5000?5000:1000*Math.pow(10,Math.ceil(Math.log10(converted/1000))));},[converted,phase,max]);
  useEffect(()=>{target.current=converted??0;let frame=0;lastFrame.current=null;const tick=(time:number)=>{if(reduced.current){motion.current=target.current;setShown(target.current);return;}const elapsed=lastFrame.current===null?16:Math.min(64,time-lastFrame.current);lastFrame.current=time;motion.current+=(target.current-motion.current)*(1-Math.exp(-elapsed/110));if(Math.abs(target.current-motion.current)<.025){motion.current=target.current;setShown(target.current);return;}setShown(motion.current);frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(tick);return()=>cancelAnimationFrame(frame);},[converted,reduceMotion]);
  const fraction=fractionFor(shown,max);const angle=-135+fraction*270;const start=position(0,166),end=position(1,166);const path=`M ${start.x} ${start.y} A 166 166 0 1 1 ${end.x} ${end.y}`;
  const ticks=useMemo(()=>Array.from({length:81},(_,i)=>{const f=i/80;return {f,major:i%10===0,start:position(f,i%10===0?145:151),end:position(f,157)};}),[]);
- const stage=phase==='complete'?(arabic?'اكتمل الاختبار':'TEST COMPLETE'):phase==='stopped'?(arabic?'تم الإيقاف':'TEST STOPPED'):phase==='error'?(arabic?'غير مكتمل':'INCOMPLETE'):upload?(arabic?'قياس الرفع':'LIVE UPLOAD'):phase==='download'?(arabic?'قياس التنزيل':'LIVE DOWNLOAD'):phase==='latency'?(arabic?'زمن الاستجابة':'CHECKING LATENCY'):phase==='connecting'?(arabic?'جارٍ الاتصال':'FINDING YOUR CONNECTION'):(arabic?'جاهز للاختبار':'READY TO CONNECT');
  const label=value===null?'—':`${converted!.toFixed(1)} ${unit}`;const Icon=phase==='complete'?Check:upload?ArrowUp:running?ArrowDown:Radio;
  return <div className={`animated-meter ${upload?'meter-upload':'meter-download'} ${running?'meter-running':''} ${waiting?'meter-waiting':''} ${phase==='complete'?'meter-complete':''}`} data-motion={reduceMotion?'off':'on'} style={{'--meter-angle':`${angle}deg`,'--meter-fill':fraction} as CSSProperties} role="group" aria-label={`${stage}: ${label}`}>
   <div className="meter-aura" aria-hidden="true"/>
@@ -44,6 +44,15 @@ export default function AnimatedSpeedometer({value,unit,phase,running,language}:
    <circle cx="210" cy="190" r="12" className="meter-hub-outer"/><circle cx="210" cy="190" r="5" className="meter-hub"/>
   </svg>
   <div className="meter-readout" aria-hidden="true"><span className="meter-stage"><i/>{stage}</span><strong>{waiting||value===null?'—':shown.toFixed(1)}</strong><span className="meter-unit"><Icon size={15}/>{unit}</span></div>
-  <button className="meter-motion-toggle" aria-pressed={!reduceMotion} onClick={()=>{const next=reduceMotion?'on':'off';setMotionPreference(next);try{localStorage.setItem('pulse-meter-motion',next);}catch{}}}>{reduceMotion?(arabic?'تفعيل الحركة':'Enable animation'):(arabic?'تقليل الحركة':'Reduce motion')}</button>
+  <button className="meter-motion-toggle" aria-pressed={!reduceMotion} onClick={()=>{const next=reduceMotion?'on':'off';setMotionPreference(next);try{localStorage.setItem('pulse-meter-motion',next);}catch{}}}>{motionLabels[locale][reduceMotion?0:1]}</button>
  </div>;
 }
+
+const motionLabels: Record<Locale,[string,string]> = {
+ en:['Enable animation','Reduce motion'], ar:['فعّل الحركة','قلّل الحركة'], ur:['حرکت فعال کریں','حرکت کم کریں'],
+ hi:['ऐनिमेशन चालू करें','ऐनिमेशन कम करें'], es:['Activar animación','Reducir movimiento'],
+ fr:['Activer les animations','Réduire les animations'], de:['Animation aktivieren','Bewegung reduzieren'],
+ pt:['Ativar animação','Reduzir movimento'], tr:['Animasyonu aç','Hareketi azalt'],
+ id:['Aktifkan animasi','Kurangi gerakan'], ru:['Включить анимацию','Уменьшить движение'],
+ zh:['开启动画','减少动态效果'], ja:['アニメーションを有効にする','動きを抑える'],
+};

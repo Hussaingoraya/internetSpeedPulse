@@ -21,9 +21,9 @@ The default canonical domain is `https://internetspeedpulse.online`. Set `NEXT_P
 - Actual server selection: Cloudflare’s speed.cloudflare.com endpoint or this website’s first-party hosting endpoint. Cloudflare uses automatic edge routing; the first-party destination is the Hostinger website server. No fixed city or Ookla server access is claimed.
 - Single mode: one request at a time. Multi: four parallel HTTP requests; the browser controls the underlying transport connections.
 - Download, upload, idle HTTP latency and jitter. Additional median loaded HTTP latency during transfers. No packet loss or ICMP ping claim.
-- Provider metadata: hosting-supplied IP, ASN organization and edge metadata when available. The current Hostinger deployment does not supply these fields. IP is hidden initially. Missing fields are shown unavailable. No external IP lookup vendor is used.
+- Provider metadata: /api/isp uses proxy-supplied organization metadata or a time-limited Team Cymru DNS ASN lookup. The response excludes the IP address. Provider and ASN are kept out of test history.
 - Opt-in ten-result local history, CSV export and clear controls. IP and provider details are never saved. CSV exports always use Mbps.
-- Light/dark themes, Mbps/MB/s, remembered mode/server preferences, English and Arabic test controls. Guides and policy pages remain English.
+- Light/dark themes, Mbps/MB/s, remembered mode/server preferences, 13 languages for the test homepage and controls. Guides and policy pages remain English.
 - Four-column expandable navigation; a Download menu for CSV exports and browser printing; glossary, FAQ, help, settings, server directory and two calculators.
 - No sign-in, accounts or cross-device synchronization, per the user’s preference.
 
@@ -81,7 +81,7 @@ Follow the collection plan in [the site audit](docs/audit-2026-11-08.md). Enter 
 
 ## Language coverage
 
-The speed test offers English and Arabic controls. Guides and policies are currently available in English. To add a translated guide, create a locale-specific route and reviewed translation, set the page language and direction, and localize titles, descriptions, slugs where appropriate, related links, and dates. Give each published translation its own canonical URL and reciprocal hreflang links. Add translated URLs to the sitemap when ready. Test the locale switch, keyboard access, mobile layouts and right-to-left rendering. Have a fluent reviewer check the technical terms and any localized policy wording.
+The test homepage has 13 indexable locale URLs. Arabic and Urdu use RTL. Locale selection follows the URL. Guides and policies are currently available in English. To add a translated guide, create a locale-specific route and reviewed translation, set the page language and direction, and localize titles, descriptions, slugs where appropriate, related links, and dates. Give each published translation its own canonical URL and reciprocal hreflang links. Add translated URLs to the sitemap when ready. Test the locale switch, keyboard access, mobile layouts and right-to-left rendering. Have a fluent reviewer check the technical terms and any localized policy wording.
 
 ## AdSense readiness checklist
 
@@ -91,3 +91,8 @@ The speed test offers English and Arabic controls. Guides and policies are curre
 - [ ] Reserve space for any future ad slot and check [layout shift](https://web.dev/articles/optimize-cls) at different widths with slow loading and empty slots.
 - [ ] Confirm the hosting transfer allowance and monitor traffic. The runtime measurement limit applies per process. Enforce any monthly cap separately.
 - [ ] Confirm the contact mailbox works and review the guides and any original evidence before publication.
+
+
+## ISP lookup on Hostinger
+
+The site requests /api/isp/ as the speed test loads. If you use Hostinger CDN, confirm that the origin only accepts traffic through the trusted proxy and that the proxy overwrites X-Real-IP with the visitor IP. Then set ISP_CLIENT_IP_HEADER=x-real-ip in the hosting environment. Cloudflare connections can use CF-Connecting-IP and an organization header when the proxy supplies it. Keep those headers trusted at the origin. The DNS fallback sends an IP-derived query to Team Cymru and returns only the network name or ASN. If the metadata or lookup is unavailable, the test still works.

@@ -1,3 +1,4 @@
+import {shareImage} from '@/components/LocalizedLayout';
 import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
@@ -37,7 +38,7 @@ export async function generateMetadata({params}:Props):Promise<Metadata> {
  return {
   title:{absolute:`${title} | InternetSpeed Pulse`},description:guide.description,
   alternates:{canonical:url},
-  openGraph:{type:'article',title:guide.title,description:guide.description,url,publishedTime:published,modifiedTime:modified},
+  openGraph:{type:'article',title:guide.title,description:guide.description,url,publishedTime:published,modifiedTime:modified,images:[shareImage]},
  };
 }
 
