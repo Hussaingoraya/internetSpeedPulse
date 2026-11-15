@@ -29,3 +29,5 @@
 /* The opening sweep is a loading cue. The scale returns when live samples arrive. */
 .meter-scale{transition:opacity .2s ease}
 .meter-waiting .meter-scale{opacity:.34}
+
+.speed-unit-select{margin-block:8px;min-height:40px;padding:5px 10px;border:1px solid #657484;border-radius:8px;background:#263545;color:#f5fbfa;font:inherit}

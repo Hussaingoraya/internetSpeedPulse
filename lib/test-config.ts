@@ -3,6 +3,11 @@ export const servers = [
  {id:'pulse',name:'InternetSpeed Pulse',region:'Hostinger website server',description:'Measures the path to this website’s hosting server. Its location and capacity may limit results.',down:'/api/speed/download',up:'/api/speed/upload'}
 ] as const;
 export type ServerId = typeof servers[number]['id'] | 'auto';
+export const speedUnits=['Mbps','Kbps','MB/s'] as const;
+export type SpeedUnit=typeof speedUnits[number];
+export function displaySpeed(mbps:number,unit:SpeedUnit) {
+ return unit==='Kbps'?mbps*1000:unit==='MB/s'?mbps/8:mbps;
+}
 export type TestMode = 'single'|'multi';
 export type TestResult = {download:number|null;upload:number|null;ping:number|null;jitter:number|null;date:string;server?:string;mode?:TestMode;duration?:number;engine?:string;downloadLatency?:number|null;uploadLatency?:number|null};
 export const historyKey='pulse-history';

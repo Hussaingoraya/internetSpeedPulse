@@ -4,8 +4,10 @@ import {ArrowDown,ArrowUp,Check,Radio} from 'lucide-react';
 import type {Locale} from '@/src/i18n/locales';
 import {type Phase} from '@/lib/measure';
 
+import {displaySpeed,type SpeedUnit} from '@/lib/test-config';
+
 type MeterPhase=Phase|'ready'|'complete'|'stopped'|'error';
-type Props={value:number|null;unit:'Mbps'|'MB/s';phase:MeterPhase;running:boolean;stage:string;locale:Locale};
+type Props={value:number|null;unit:SpeedUnit;phase:MeterPhase;running:boolean;stage:string;locale:Locale};
 const marks=[0,5,10,50,100,250,500,750,1000];
 function position(fraction:number,radius:number){const angle=(135+fraction*270)*Math.PI/180;return {x:210+Math.cos(angle)*radius,y:190+Math.sin(angle)*radius};}
 function fractionFor(value:number,max:number){const scaled=value/max*1000;if(scaled<=0)return 0;if(scaled>=1000)return 1;const i=marks.findIndex(n=>n>=scaled);return ((i-1)+(scaled-marks[i-1])/(marks[i]-marks[i-1]))/(marks.length-1);}
@@ -21,7 +23,7 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
  const [animatedFraction,setAnimatedFraction]=useState(0);
  const [max,setMax]=useState(1000);
  const [motionPreference,setMotionPreference]=useState<'on'|'off'>('on');
- const converted=value===null?null:unit==='MB/s'?value/8:value;
+ const converted=value===null?null:displaySpeed(value,unit);
  const upload=phase==='upload';
  const waiting=running&&(phase==='connecting'||phase==='latency'||converted===null||converted===0);
  const reduceMotion=motionPreference==='off';
@@ -36,16 +38,16 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
 
  useEffect(()=>{
   if(phase==='ready'||phase==='connecting')setMax(1000);
-  else if(converted!==null&&converted>max){
-   setMax(converted<=5000?5000:1000*Math.pow(10,Math.ceil(Math.log10(converted/1000))));
+  else if(value!==null&&value>max){
+   setMax(value<=5000?5000:1000*Math.pow(10,Math.ceil(Math.log10(value/1000))));
   }
- },[converted,phase,max]);
+ },[value,phase,max]);
 
  useEffect(()=>{
   // Use a loading sweep while the readout is blank. Both modes share the same needle position.
   sweeping.current=waiting&&!reduceMotion;
   if(!sweeping.current)sweepStarted.current=null;
-  target.current=waiting||converted===null?0:fractionFor(converted,max);
+  target.current=waiting||converted===null?0:fractionFor(value!,max);
 
   if(reduceMotion){
    if(frame.current!==null)cancelAnimationFrame(frame.current);
@@ -77,9 +79,9 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
    setAnimatedFraction(positionRef.current);
   };
   frame.current=requestAnimationFrame(tick);
- },[converted,max,reduceMotion,waiting]);
+ },[converted,max,reduceMotion,value,waiting]);
 
- const fraction=reduceMotion&&converted!==null?fractionFor(converted,max):animatedFraction;
+ const fraction=reduceMotion&&converted!==null?fractionFor(value!,max):animatedFraction;
  const angle=-135+fraction*270;
  const start=position(0,166),end=position(1,166);
  const path=`M ${start.x} ${start.y} A 166 166 0 1 1 ${end.x} ${end.y}`;
@@ -101,7 +103,7 @@ export default function AnimatedSpeedometer({value,unit,phase,running,stage,loca
    <path d={path} className="meter-loading-arc" fill="none" stroke={`url(#${id}-arc)`} strokeWidth="19" strokeLinecap="round" pathLength="100" strokeDasharray="13 87"/>
    <path d={`M ${position(0,137).x} ${position(0,137).y} A 137 137 0 1 1 ${position(1,137).x} ${position(1,137).y}`} fill="none" stroke="#687889" strokeOpacity=".18" strokeWidth="1"/>
    {ticks.map((tick,i)=><line key={i} x1={tick.start.x} y1={tick.start.y} x2={tick.end.x} y2={tick.end.y} className={`meter-tick ${tick.major?'major':''} ${tick.f<=fraction&&!waiting&&converted!==null?'lit':''}`} strokeWidth={tick.major?1.8:1} strokeLinecap="round"/>)}
-   {marks.map((mark,i)=>{const point=position(i/8,128);return <text key={mark} x={point.x} y={point.y} dy=".35em" textAnchor="middle" className="meter-scale">{short(mark*max/1000)}</text>;})}
+   {marks.map((mark,i)=>{const point=position(i/8,128);return <text key={mark} x={point.x} y={point.y} dy=".35em" textAnchor="middle" className="meter-scale">{short(displaySpeed(mark*max/1000,unit))}</text>;})}
    <g className="meter-needle" style={{transformOrigin:'210px 190px',transform:`rotate(${angle}deg)`}}>
     <path d="M 206 196 L 207.8 92 Q 210 82 212.2 92 L 214 196 Z" fill={`url(#${id}-needle)`}/>
     <path d="M 210 190 L 210 93" stroke="#fff" strokeWidth=".8" opacity=".75"/>

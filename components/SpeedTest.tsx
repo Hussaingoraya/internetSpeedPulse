@@ -3,7 +3,7 @@ import {useState,useRef,useEffect,useCallback} from 'react';
 import Link from 'next/link';
 import {ArrowDown,ArrowUp,Activity,Radio,ArrowUpRight,Copy,Check,Zap,UserRound,Server,Download,X} from 'lucide-react';
 import {usePreferences} from './Preferences';
-import {servers,readHistory,historyKey,downloadCSV,type TestResult,type ServerId} from '@/lib/test-config';
+import {servers,speedUnits,displaySpeed,type SpeedUnit,readHistory,historyKey,downloadCSV,type TestResult,type ServerId} from '@/lib/test-config';
 import {runMeasurement,type Phase} from '@/lib/measure';
 import TransferChart,{type TransferPoint} from './TransferChart';
 import AnimatedSpeedometer from './AnimatedSpeedometer';
@@ -49,7 +49,7 @@ export default function SpeedTest({locale='en',dictionary=en}:{locale?:Locale;di
  },[]);
  useEffect(()=>{void detect();},[detect]);
  function toggle(){const next=!save;setSave(next);saveRef.current=next;try{localStorage.setItem('pulse-save',String(next));if(!next)localStorage.removeItem(historyKey);}catch{setMessage(locale==='en'?'Your browser blocked local storage. Results will not persist.':unavailable);}}
- const num=(n:number|null,bandwidth=false)=>n===null?'—':(bandwidth&&prefs.unit==='MB/s'?n/8:n).toFixed(1);
+ const num=(n:number|null,bandwidth=false)=>n===null?'—':(bandwidth?displaySpeed(n,prefs.unit):n).toFixed(1);
  async function copy(){try{await navigator.clipboard.writeText(`InternetSpeed Pulse\n ${downLabel}: ${result.download?.toFixed(2)} Mbps\n${upLabel}: ${result.upload?.toFixed(2)} Mbps\n${idle}: ${num(result.ping)} ms\n${jitter}: ${num(result.jitter)} ms\n${serverLabel}: ${result.server}\n${result.mode==='single'?single:multi}\n${result.date}`);setCopied(true);setTimeout(()=>setCopied(false),2000);}catch{setMessage(locale==='en'?'Clipboard is unavailable. Use Download CSV to keep this result.':csv);}}
  const metrics=[{key:'download',icon:ArrowDown},{key:'upload',icon:ArrowUp},{key:'ping',icon:Activity},{key:'jitter',icon:Radio}] as const;const display=phase==='upload'?result.upload:result.download;const completed=phase==='complete';
  useEffect(()=>{const pause=()=>{if(document.hidden&&controller.current){runId.current++;controller.current.abort();controller.current=null;setRunning(false);setPhase('stopped');setMessage(locale==='en'?'Test stopped because this tab was hidden. Keep the tab visible for reliable timings. Partial results are not saved.':stopped);}};document.addEventListener('visibilitychange',pause);return()=>document.removeEventListener('visibilitychange',pause);},[]);
@@ -95,7 +95,9 @@ export default function SpeedTest({locale='en',dictionary=en}:{locale?:Locale;di
    <div className="connection-mode"><div className="segmented-control" role="group" aria-label={`${single} / ${multi}`}>
     <button disabled={running} aria-pressed={prefs.mode==='multi'} onClick={()=>setPrefs({mode:'multi'})}>{multi}<small>4</small></button>
     <button disabled={running} aria-pressed={prefs.mode==='single'} onClick={()=>setPrefs({mode:'single'})}>{single}<small>1</small></button>
-   </div></div>
+   </div><select aria-label="Mbps / Kbps / MB/s" value={prefs.unit} onChange={event=>setPrefs({unit:event.target.value as SpeedUnit})} className="speed-unit-select">
+    {speedUnits.map(unit=><option key={unit} value={unit}>{unit}</option>)}
+   </select></div>
    {completed&&<div className="result-actions test-result-actions">
     <button type="button" onClick={copy}>{copied?<Check size={16}/>:<Copy size={16}/>} {copied?copiedLabel:copyLabel}</button>
     <button type="button" onClick={()=>downloadCSV([result])}><Download size={16}/>{csv}</button>
@@ -114,7 +116,7 @@ export default function SpeedTest({locale='en',dictionary=en}:{locale?:Locale;di
   <dialog ref={dialog} className="server-dialog" onCancel={()=>setShowServers(false)} onClose={()=>{setShowServers(false);serverTrigger.current?.focus();}} aria-labelledby="server-title">
    <div className="dialog-heading"><h2 id="server-title">{change}</h2><button className="icon-button" aria-label={dictionary.extras[2]} onClick={()=>setShowServers(false)}><X size={21}/></button></div>
    <div className="server-options">{[{id:'auto',name:automatic},...servers].map(s=><button key={s.id} className={prefs.server===s.id?'server-option chosen':'server-option'} aria-pressed={prefs.server===s.id} onClick={()=>{setPrefs({server:s.id as ServerId});setResult(blank);setPhase('ready');setShowServers(false);}}>
-    {s.id==='auto'?<Zap size={22}/>:<Server size={22}/>}<strong><bdi>{s.name}</bdi></strong>{prefs.server===s.id&&<Check size={20}/>}
+    {s.id==='auto'?<Zap size={22}/>:<Server size={22}/>}<span><strong><bdi>{s.name}</bdi></strong>{locale==='en'&&'region' in s&&<small>{s.region}</small>}</span>{prefs.server===s.id&&<Check size={20}/>}
    </button>)}</div>
    <Link className="text-link" href="/servers/" onClick={()=>setShowServers(false)}>{serverLabel} ↗</Link>
   </dialog>
