@@ -35,3 +35,11 @@ html[data-theme=dark] :focus-visible{outline-color:#c5ef7b}
 }
 
 .query-guide-links{display:flex;flex-direction:column;gap:12px;padding-top:22px;font-size:14px;color:var(--ink)}.query-guide-links a{text-decoration:underline;text-underline-offset:3px;line-height:1.7;overflow-wrap:anywhere}
+
+.settings-card .settings-server{display:grid;justify-items:start;gap:8px;margin-block-start:16px}
+.settings-card dl{display:grid;gap:6px;margin-block:12px}
+.settings-card dd{margin:0 0 8px;font-weight:650;overflow-wrap:anywhere}
+.settings-server-dialog{max-block-size:85dvh;overflow:auto}
+.settings-server-search{display:grid;gap:6px;margin-block:12px}
+.settings-server-search span{display:flex;align-items:center;gap:6px}
+.settings-server-search input{width:100%;min-height:44px;padding:8px 12px;border:1px solid #687788;border-radius:8px;background:transparent;color:inherit;font:inherit}
