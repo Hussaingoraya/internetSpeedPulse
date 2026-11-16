@@ -150,7 +150,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Advertising and consent",
-        "The site contains an AdSense account verification meta tag and ads.txt authorization. Neither is an ad delivery script. AdSense ad requests, automatic ads and ad units are disabled in this release because a certified consent configuration has not been confirmed. We do not present the results-history checkbox as advertising consent. Before advertising is activated, this policy and the relevant vendor disclosures must reflect that setup, and required consent choices must be implemented and tested."
+        "The site loads the Google AdSense script and publishes an account verification tag and ads.txt authorization. Google may receive information such as your IP address, browser details and the page you visit, and may use cookies or similar technologies for advertising depending on the account and consent settings. The results-history checkbox controls local test history."
       ],
       [
         "Your choices",
@@ -202,7 +202,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Advertising storage",
-        "No AdSense delivery script or ad unit is active in this release. Ownership verification uses a meta tag and ads.txt only. A results preference is not advertising consent. If advertising is introduced, the certified consent setup and vendor information must be completed before relevant ad requests are enabled."
+        "The site loads the Google AdSense script. Google may use cookies or similar technologies depending on advertising settings and applicable consent choices. Browser site-data controls can remove stored cookies. The Remember results setting only controls local test history."
       ]
     ]
   },
@@ -220,7 +220,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Search and advertising",
-        "Technical checks and informational pages do not guarantee Google indexing, search rankings or AdSense approval. Google makes those decisions independently. Ad delivery is currently disabled pending consent configuration."
+        "Technical checks and informational pages do not guarantee Google indexing, search rankings or AdSense approval. Google makes those decisions independently."
       ]
     ]
   },
@@ -246,7 +246,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Commercial relationships",
-        "The site has no claimed paid provider rankings or endorsements. Ad delivery is disabled pending consent setup. Any future advertising or paid placement must be visibly identified and separated from test controls and editorial conclusions."
+        "The site has no claimed paid provider rankings or endorsements. Any future advertising or paid placement must be visibly identified and separated from test controls and editorial conclusions."
       ]
     ]
   }

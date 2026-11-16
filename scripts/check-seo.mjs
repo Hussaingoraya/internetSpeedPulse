@@ -21,8 +21,10 @@ for (const url of urls) {
   assert(!/<meta name="robots" content="[^"]*noindex/.test(html), `${path}: noindex in sitemap`);
   assert(/<link[^>]+as="font"/.test(html), `${path}: local font preload missing`);
   assert(!html.includes('fonts.googleapis.com') && !html.includes('fonts.gstatic.com'), `${path}: external font request`);
-  assert(html.includes('name="google-adsense-account" content="ca-pub-6573791611846419"'), `${path}: AdSense ownership verification missing`);
-  assert(!html.includes('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'), `${path}: ad delivery must stay disabled until CMP setup`);
+  assert(html.includes('name="google-adsense-account" content="ca-pub-2709394280600943"'), `${path}: AdSense ownership verification missing`);
+  const adScripts = [...html.matchAll(/<script\b[^>]*adsbygoogle\.js[^>]*>/g)];
+  assert.equal(adScripts.length, 1, `${path}: expected exactly one AdSense script`);
+  assert(adScripts[0][0].includes('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2709394280600943') && adScripts[0][0].includes('crossorigin="anonymous"') && /\basync(?:=""|\s|>)/.test(adScripts[0][0]), `${path}: unexpected AdSense script attributes`);
   for (const match of html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)) {
     JSON.parse(match[1]);
   }

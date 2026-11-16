@@ -26,7 +26,7 @@ export const footerLinks = [
 export function DocumentShell({children,locale,header,footer}:{children:React.ReactNode;locale:Locale;header:React.ReactNode;footer:React.ReactNode}) {
  const {nav}=dictionaries[locale];
  return <html lang={locale} dir={direction(locale)} className={inter.variable}>
-  <head><meta name="google-adsense-account" content="ca-pub-6573791611846419"/></head>
+  <head><meta name="google-adsense-account" content="ca-pub-2709394280600943"/><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2709394280600943" crossOrigin="anonymous"/></head>
   <body><PreferencesProvider><a href="#main" className="skip">{nav[9]}</a>{header}<main id="main">{children}</main>{footer}</PreferencesProvider></body>
  </html>;
 }

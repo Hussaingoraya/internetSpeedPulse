@@ -43,7 +43,7 @@ Worker endpoints cap each download at 8 MB and each upload at 8 MB, reject forei
 
 21 indexable content destinations, two noindex utility pages, a 404, sitemap.xml and robots.txt. Unique metadata/canonicals, Article and WebSite structured data, crawlable HTML and internal links. The supplied daily worldwide query snapshot informed useful topics; normalized interest values are not absolute search volumes. No ranking or indexing guarantees.
 
-Before AdSense, set the actual publisher identity, public domain and contact email, review content and disclosures, verify Search Console, submit the sitemap and add only genuine Google publisher/verification details. Add the exact ads.txt entry supplied by Google if required. Advertising is disabled. Configure any required certified consent platform and actual vendor disclosures before enabling ads. Google decides approval.
+Before AdSense, set the actual publisher identity, public domain and contact email, review content and disclosures, verify Search Console, submit the sitemap and add only genuine Google publisher/verification details. Add the exact ads.txt entry supplied by Google if required. The AdSense connection script is installed. Configure any required certified consent platform and verify vendor disclosures before serving ads. Google decides approval.
 
 The contact tool copies a prepared message without claiming delivery if no email is configured; otherwise it opens the mail application. Inter is served locally through next/font, with its license in app/fonts.
 
@@ -63,7 +63,7 @@ These checks do not measure real-user Core Web Vitals, search ranking, backlinks
 
 See [docs/audit-2026-11-08.md](docs/audit-2026-11-08.md) for reviewed sources, content changes, verification scope, ad/CMP activation steps and a precise real-world evidence collection protocol.
 
-Ad delivery is disabled pending an actual published certified CMP. The AdSense account meta tag and ads.txt remain for ownership verification. The dormant ad placements make no network requests. Do not reintroduce the delivery script or activate Auto ads until consent behavior and placement have been tested for the audience.
+The shared document head includes the AdSense connection script and account meta tag. The publisher ID also appears in ads.txt. AdPlacement remains dormant. Configure required consent and verify placement behavior in the AdSense account before turning on Auto ads.
 
 First-party endpoints reserve payload against a default 10 GB/hour per-process allowance. Set runtime MEASUREMENT_HOURLY_BYTES to a nonnegative integer to change it, or MEASUREMENT_ENABLED=false to disable first-party transfers. Restarts/multiple processes are separate; use Hostinger/WAF controls and monitor account limits. These are not distributed or monthly cost guarantees. API traffic is uncached, size bounded and upload reads time out after 15 seconds.
 
