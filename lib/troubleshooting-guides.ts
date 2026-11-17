@@ -2,11 +2,25 @@ import type {NewGuide} from './new-guides';
 
 export const troubleshootingGuides: NewGuide[] = [
  {
+  slug:'one-website-wont-load', title:'One website won’t load? How to find the cause',
+  searchTitle:'Why One Website Won’t Load', category:'TROUBLESHOOTING', art:'test',
+  description:'Compare browsers, devices and networks to diagnose a single website that fails while the rest of the internet works.',
+  tool:{href:'/help/',label:'Troubleshoot InternetSpeed Pulse if the test page fails'},
+  related:['wifi-connected-no-internet','does-vpn-slow-internet','internet-keeps-disconnecting'],
+  sections:[
+   ['Check the address and exact error','Open a familiar unrelated site first. Then type the affected site’s official address or open a trusted bookmark. Compare the homepage with the specific link that failed. If the homepage works and one link gives a 404, the link may have moved. If the browser shows a certificate or security warning, stop and verify the address and your device clock before returning.'],
+   ['Compare browsers on the same device','Try the same address in a private window or another browser. A private window starts with separate site data, and whether an extension runs there depends on your settings. If the page only fails in your regular browser, check extensions and try clearing data for that site. Clearing its cookies can sign you out. A private window may also look different because you are signed out, so compare the same public page first.'],
+   ['Compare devices and connections','Try the exact URL on a second device on the same network. Then, if your data plan allows, check once from a phone using cellular data. If both home devices fail but the mobile test works, record both networks and the error. DNS, filtering or routing may differ. Check for a service notice from the website and keep any required work or school security settings in place.'],
+   ['Illustrative example','A store’s homepage works in every browser, but its checkout fails in one desktop browser. The same checkout loads in another browser on the same device. In this illustrative case, check the first browser’s site data and extensions. The comparison gives the store a more useful report than a speed test result alone.'],
+   ['Can a speed test tell me whether the website is down?','A speed test measures a path to its own server. A healthy result can coexist with a problem on another route or with the website itself. Send the site operator the public URL, time zone, exact error and the browser and network comparisons. Remove login tokens, account information and payment details before sharing screenshots or links.'],
+  ],
+ },
+ {
   slug:'wifi-connected-no-internet', title:'Wi-Fi connected but no internet? What to check',
   searchTitle:'Wi-Fi Connected but No Internet?', category:'TROUBLESHOOTING', art:'wifi',
   description:'Check whether a connected Wi-Fi device is behind a sign-in page, has an address problem, or has lost access beyond the router.',
   tool:{href:'/help/',label:'Get help if your speed test cannot start'},
-  related:['internet-keeps-disconnecting','ethernet-vs-wifi','why-is-my-wifi-so-slow'],
+  related:['one-website-wont-load','internet-keeps-disconnecting','why-is-my-wifi-so-slow'],
   sections:[
    ['Check whether the warning matches what you can open','A connected Wi-Fi icon means your device joined the wireless network. Try two unrelated sites in the browser and check whether other apps work. If websites work despite the warning, the operating system’s connectivity check may have failed on its own. If only one site fails, record the address and error before changing any network settings.'],
    ['Look for a sign-in prompt on guest Wi-Fi','A hotel, airport or café network may need you to accept terms or sign in before it allows internet traffic. Verify the network name with the venue and look for your device’s sign-in notification. Disconnect if you cannot verify the network or if the page asks you to ignore a certificate warning. On a managed device, consult IT if the sign-in step is blocked.'],

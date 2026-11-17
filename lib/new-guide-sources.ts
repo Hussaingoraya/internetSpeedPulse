@@ -3,6 +3,7 @@ const broadband = {label:'Ofcom practical broadband testing guidance',url:'https
 const cloudflare = {label:'Cloudflare connection speed testing documentation',url:'https://developers.cloudflare.com/fundamentals/performance/test-speed/'};
 
 export const newGuideSources: Record<string, {label:string; url:string}[]> = {
+ 'one-website-wont-load': [{label:'Microsoft Edge troubleshooting for pages that fail to load',url:'https://support.microsoft.com/en-gb/edge/what-to-do-if-microsoft-edge-isn-t-working'}],
  'wifi-connected-no-internet': [{label:'Microsoft guidance for connected Wi-Fi with no internet',url:'https://support.microsoft.com/en-us/windows/experience/connectivity-networking/fix-wi-fi-connection-issues-in-windows'}],
  'internet-slow-at-night': [broadband],
  'internet-keeps-disconnecting': [{label:'Microsoft Wi-Fi connection troubleshooting',url:'https://support.microsoft.com/en-us/windows/experience/connectivity-networking/fix-wi-fi-connection-issues-in-windows'}],
