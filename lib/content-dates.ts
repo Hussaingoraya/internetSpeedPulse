@@ -19,7 +19,7 @@ const dates: Record<string, ArticleDates> = {
  'speed-test-mobile-data': {published:'2026-11-12',modified:'2026-11-12'},
  'video-call-internet-speed': {published:'2026-11-12',modified:'2026-11-12'},
  'router-placement-guide': {published:'2026-11-12',modified:'2026-11-12'},
- 'ethernet-vs-wifi': {published:'2026-11-12',modified:'2026-11-12'},
+ 'ethernet-vs-wifi': {published:'2026-11-12',modified:'2026-11-18'},
  'speed-test-evidence-for-provider': {published:'2026-11-12',modified:'2026-11-12'},
  'mbps-vs-mbs': {published:'2026-11-12',modified:'2026-11-12'},
 };

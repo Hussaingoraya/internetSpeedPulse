@@ -96,7 +96,7 @@ Do I need to run several full speed tests? Start with the smallest comparison th
 {
  slug:'why-speed-tests-differ',title:'Why different speed tests give different results',searchTitle:'Why Speed Test Results Differ',
  category:'MEASUREMENT',art:'test',description:'Compare speed test results without mixing up destinations, test durations, throughput summaries and browser conditions.',
- tool:{href:'/methodology/',label:'See the InternetSpeed Pulse measurement method'},related:['how-to-test-internet-speed','does-vpn-slow-internet','ping-and-jitter-explained'],
+ tool:{href:'/methodology/',label:'See the InternetSpeed Pulse measurement method'},related:['how-to-test-internet-speed','ethernet-vs-wifi','ping-and-jitter-explained'],
  sections:[
  ['Compare the paths before the numbers',`Your device transfers data to a particular destination when you run a test. One service may choose a server in your provider’s network. Another may choose an edge run by a different organization. The routes can share the first part of the journey and diverge after that. A test that stays close to your provider can show capacity on a shorter path, while a test to a different network can expose a different constraint.
 
@@ -263,7 +263,11 @@ For a large download, compare sustained throughput. For a call or game, compare 
 A wired connection bypasses the Wi-Fi radio for that device. It still shares the router and internet service with everyone else. That makes wiring useful as a diagnostic as well as a permanent choice. If the task improves on Ethernet, investigate what was different about the wireless path. If it behaves the same, check the application and the rest of the path before spending money on cabling.`],
  ['Inspect the whole wired link',`Find the Ethernet port on the device or the adapter you intend to use. Check its rated speed and the speed reported after connecting. The negotiated value describes the link between two adjacent devices. A router port, wall jack, switch and laptop adapter can impose separate limits. Follow the path from the laptop to the router when checking equipment.
 
-If a gigabit-capable laptop reports a 100 Mbps link, try a known working cable and another compatible router port. Swap one part at a time and read the negotiated value again. A damaged cable, a slower port or an adapter can explain the result. Use the network details screen or the router’s client list if the device provides it.
+If a gigabit-capable laptop reports a 100 Mbps link, check the wired connection before running another internet speed test. On Windows, open Settings, then Network & internet, then Ethernet. Look for Link speed in the active connection’s properties. On other devices, look for the negotiated rate in the network details or router’s port status. A 100 Mbps Ethernet link caps the traffic crossing it, and an application will usually see less because protocols use some of that capacity.
+
+First replace only the patch cable with a known working gigabit cable and recheck the link speed. If it still shows 100 Mbps, move the same cable to a router port rated for gigabit. Then try a direct path that bypasses any wall jack, dock or switch. Reinsert one piece at a time if the direct path restores gigabit. A change after bypassing multiple pieces identifies the path to investigate. Reconnecting them one at a time helps isolate the affected part.
+
+If the device already reports a gigabit link, check any switch uplink separately before blaming the router or provider. The laptop’s rate describes the nearest link. A slower link farther upstream can still limit the path.
 
 USB Ethernet adapters can be handy, particularly on thin laptops. Check what the adapter and the port support and connect it directly for the first test if a dock complicates the path. Keep track of the pieces that changed so you can repeat the working setup later.`],
  ['Compare under everyday load',`Start with a quiet wired baseline and turn off Wi-Fi on the test device so you can identify the active connection. Keep the same device and server choice when you switch to Wi-Fi. Check which access point and band the device actually uses. If you routinely move between rooms, keep a test at the desk separate from a roaming test.

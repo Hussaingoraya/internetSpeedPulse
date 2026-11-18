@@ -13,7 +13,7 @@ export const newGuideSources: Record<string, {label:string; url:string}[]> = {
  'speed-test-mobile-data': [{label:'Apple documentation on cellular data and roaming settings',url:'https://support.apple.com/guide/iphone/view-or-change-cellular-data-settings-iph3dd5f213/ios'}],
  'video-call-internet-speed': [{label:'Zoom Web App bandwidth requirements',url:'https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0058323'}],
  'router-placement-guide': [broadband,appleWiFi],
- 'ethernet-vs-wifi': [broadband],
+ 'ethernet-vs-wifi': [broadband,{label:'TP-Link guide to checking Ethernet link speed',url:'https://www.tp-link.com/us/support/faq/2899/'}],
  'speed-test-evidence-for-provider': [broadband],
  'mbps-vs-mbs': [{label:'NIST guide to decimal and binary prefixes',url:'https://www.nist.gov/pml/special-publication-811/nist-guide-si-chapter-4-two-classes-si-units-and-si-prefixes'}],
 };
