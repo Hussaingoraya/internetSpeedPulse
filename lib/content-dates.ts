@@ -3,7 +3,8 @@ type ArticleDates = {published: string; modified: string};
 // Dates reflect editorial changes in the site's Asia/Dubai time zone.
 const originalGuide = {published:'2026-11-05',modified:'2026-11-12'};
 const dates: Record<string, ArticleDates> = {
- 'one-website-wont-load': {published:'2026-11-17',modified:'2026-11-17'},
+ 'dns-server-not-responding': {published:'2026-11-19',modified:'2026-11-19'},
+ 'one-website-wont-load': {published:'2026-11-17',modified:'2026-11-19'},
  'wifi-connected-no-internet': {published:'2026-11-15',modified:'2026-11-17'},
  'internet-slow-at-night': {published:'2026-11-14',modified:'2026-11-14'},
  'internet-keeps-disconnecting': {published:'2026-11-14',modified:'2026-11-14'},

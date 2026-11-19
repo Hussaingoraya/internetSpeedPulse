@@ -2,11 +2,27 @@ import type {NewGuide} from './new-guides';
 
 export const troubleshootingGuides: NewGuide[] = [
  {
+  slug:'dns-server-not-responding',title:'DNS server not responding? Test name lookup first',
+  searchTitle:'DNS Server Not Responding? What to Check',category:'TROUBLESHOOTING',art:'test',
+  description:'Compare name lookups, devices and browser settings to investigate DNS errors without changing your entire network at once.',
+  tool:{href:'/help/',label:'Get help with a test that cannot connect'},
+  related:['one-website-wont-load','wifi-connected-no-internet','speed-test-evidence-for-provider'],
+  sections:[
+   ['Check the exact message and scope','Write down the browser error and try two unrelated public websites. A DNS failure means a name lookup did not produce a usable answer for that request. An NXDOMAIN response indicates that the queried name was reported as nonexistent, while a timeout means no answer arrived within the waiting period. Check spelling before changing settings. A missing page that returns HTTP 404 has already reached a web server and calls for a different investigation.'],
+   ['Compare a working name with the affected name','On Windows, open Command Prompt and run nslookup example.com, then repeat with the affected public hostname. Keep just the hostname, such as example.com, rather than the full page URL. Record the responding DNS server and whether you receive an answer, a timeout or an error. If one name fails and the other resolves, check the affected website’s status. If both fail, compare a second device on the same network. Avoid including private company hostnames in a public support post.'],
+   ['Separate browser DNS from operating-system DNS','A browser configured to use secure DNS can send lookups through a different resolver from the one used by nslookup. A VPN may also supply a separate resolver or routes for company names. Compare the browser’s settings with the active network settings. Preserve employer, school and family filtering requirements. If the browser alone fails, test another browser under the same network conditions and record which resolver configuration differs.'],
+   ['Try one controlled resolver comparison','On a personal network where you can choose the resolver, run nslookup example.com 1.1.1.1 to query Cloudflare’s public resolver directly. Use a public name you expect to resolve. If this succeeds while the default resolver times out, repeat the pair before changing anything. That pattern gives you evidence to investigate the default resolver or the route to it. A failed direct query can also reflect network policy. If you change DNS settings, save the original values and follow the provider’s device-specific instructions. Test the affected task again, including any local names you use.'],
+   ['Illustrative example','A home laptop times out when looking up two public names through its default resolver. A direct lookup through an allowed alternate resolver succeeds twice. Another device on the same home network has the same pattern. In this illustrative scenario, record the time and resolver addresses and ask the provider whether its DNS service has an issue. A speed test alone would add little while the names needed to reach websites cannot resolve.'],
+   ['Will changing DNS increase download speed?','DNS helps a device find an address before it connects. Improving a failing or slow lookup may help pages begin loading, but it does not increase the capacity of your broadband line. If names resolve and files still transfer slowly, return to a controlled throughput comparison. For recurring DNS errors, keep the exact response and affected names so support can investigate them.'],
+  ],
+ },
+
+ {
   slug:'one-website-wont-load', title:'One website won’t load? How to find the cause',
   searchTitle:'Why One Website Won’t Load', category:'TROUBLESHOOTING', art:'test',
   description:'Compare browsers, devices and networks to diagnose a single website that fails while the rest of the internet works.',
   tool:{href:'/help/',label:'Troubleshoot InternetSpeed Pulse if the test page fails'},
-  related:['wifi-connected-no-internet','does-vpn-slow-internet','internet-keeps-disconnecting'],
+  related:['dns-server-not-responding','wifi-connected-no-internet','does-vpn-slow-internet'],
   sections:[
    ['Check the address and exact error','Open a familiar unrelated site first. Then type the affected site’s official address or open a trusted bookmark. Compare the homepage with the specific link that failed. If the homepage works and one link gives a 404, the link may have moved. If the browser shows a certificate or security warning, stop and verify the address and your device clock before returning.'],
    ['Compare browsers on the same device','Try the same address in a private window or another browser. A private window starts with separate site data, and whether an extension runs there depends on your settings. If the page only fails in your regular browser, check extensions and try clearing data for that site. Clearing its cookies can sign you out. A private window may also look different because you are signed out, so compare the same public page first.'],
