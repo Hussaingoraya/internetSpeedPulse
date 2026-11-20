@@ -2,6 +2,22 @@ import type {NewGuide} from './new-guides';
 
 export const troubleshootingGuides: NewGuide[] = [
  {
+  slug:'tv-buffering-fast-internet',title:'TV buffering despite fast internet? Compare the playback path',
+  searchTitle:'TV Buffering Despite Fast Internet?',category:'TROUBLESHOOTING',art:'wifi',
+  description:'Check the streaming device, service and Wi-Fi path when videos pause even though a speed test looks healthy.',
+  tool:{href:'/4k-streaming-speed-test/',label:'Check bandwidth in the viewing room'},
+  related:['router-placement-guide','ethernet-vs-wifi','how-much-internet-speed-do-i-need'],
+  sections:[
+   ['Check the app and the affected device','Record whether playback pauses, quality drops or the app shows an error. Try a different title on the same app, then another streaming app on the same TV if available. If one title fails while others play, check that service’s status and support guidance. If all apps fail only on one device, check the device’s software updates and restart it using the manufacturer’s instructions.'],
+   ['Measure where the TV actually connects','A wired laptop near the router can show healthy throughput while the television has poor Wi-Fi in another room. Run a browser test near the TV on the same network and band where practical. A nearby laptop is a comparison device with its own radio, so also use the TV or streaming app’s connection check if it provides one. Record whether the TV uses the router directly, a mesh node or an extender.'],
+   ['Try a wired comparison before changing plans','If the device supports Ethernet, try a temporary cable routed safely away from walkways. Some streaming devices need a compatible adapter. Retry the same app and title during a similar time window. If playback becomes reliable on Ethernet, investigate the wireless path, node placement and interference. If both connections buffer, compare another device or service and pause large household transfers.'],
+   ['Check quality settings and simultaneous use','Confirm that the app, device and subscription support the selected resolution, and use the service’s published speed requirements. Temporarily choosing a lower quality can help you test whether playback becomes stable with less traffic. Keep the comparison on the same device and title. If another household member is downloading or uploading, pause that activity once and retry. Record the change that helped.'],
+   ['Illustrative example','A TV pauses in two apps while a wired laptop records a fast speed test. A temporary Ethernet connection makes the same TV play reliably during the usual viewing period. These are illustrative observations. They point toward checking the TV’s Wi-Fi path before paying for a faster broadband plan. The next comparison could be a better mesh-node position, followed by playback on the TV again.'],
+   ['Does a fast test guarantee smooth 4K playback?','A browser test measures traffic to a test server at that moment. Your streaming service uses a different destination, and throughput can change during a film. If the problem persists, report the app, title, time, device and wired comparison to the service or provider. Hide account details and any private viewing information when sharing screenshots.'],
+  ],
+ },
+
+ {
   slug:'dns-server-not-responding',title:'DNS server not responding? Test name lookup first',
   searchTitle:'DNS Server Not Responding? What to Check',category:'TROUBLESHOOTING',art:'test',
   description:'Compare name lookups, devices and browser settings to investigate DNS errors without changing your entire network at once.',

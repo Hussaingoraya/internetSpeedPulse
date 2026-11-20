@@ -214,7 +214,7 @@ What should I tell IT? Include a time and time zone, meeting platform, device, c
 {
  slug:'router-placement-guide',title:'Where to put your router: a placement routine you can test',searchTitle:'Where to Put Your Wi-Fi Router',
  category:'WI-FI',art:'wifi',description:'Map the rooms that need coverage and compare practical router or mesh positions with a repeatable routine.',
- tool:{href:'/',label:'Measure a baseline before moving your router'},related:['wifi-bands-24-5-6-ghz','why-is-my-wifi-so-slow','ethernet-vs-wifi'],
+ tool:{href:'/',label:'Measure a baseline before moving your router'},related:['wifi-bands-24-5-6-ghz','tv-buffering-fast-internet','ethernet-vs-wifi'],
  sections:[
  ['Map the places where the connection matters',`Draw a rough outline of your home and mark the router, work desk, television and any room with recurring trouble. Add floors, large walls and metal storage between the router and each location. A useful map takes a few minutes. Distances and barriers matter more than a precise floor plan.
 
