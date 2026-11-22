@@ -11,7 +11,7 @@ const dates: Record<string, ArticleDates> = {
  'internet-keeps-disconnecting': {published:'2026-11-14',modified:'2026-11-14'},
  'what-is-a-good-internet-speed': {...originalGuide},
  'how-to-test-internet-speed': {...originalGuide,modified:'2026-11-17'},
- 'why-is-my-wifi-so-slow': {...originalGuide},
+ 'why-is-my-wifi-so-slow': {...originalGuide,modified:'2026-11-22'},
  'download-vs-upload-speed': {...originalGuide},
  'ping-and-jitter-explained': {...originalGuide},
  'how-much-internet-speed-do-i-need': {...originalGuide},
