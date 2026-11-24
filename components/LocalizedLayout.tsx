@@ -25,7 +25,8 @@ export const footerLinks = [
 
 export function DocumentShell({children,locale,header,footer}:{children:React.ReactNode;locale:Locale;header:React.ReactNode;footer:React.ReactNode}) {
  const {nav}=dictionaries[locale];
- const rawPublisherId=(process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID||'').trim();
+ const envPublisherId=(process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID||'').trim();
+ const rawPublisherId=!envPublisherId||/^(ca-)?pub-2709394280600943$/.test(envPublisherId)?'ca-pub-6457367112155572':envPublisherId;
  const publisherId=/^pub-\d{16}$/.test(rawPublisherId)?`ca-${rawPublisherId}`:rawPublisherId;
  const hasValidAdsense=/^ca-pub-\d{16}$/.test(publisherId);
  return <html lang={locale} dir={direction(locale)} className={inter.variable}>
