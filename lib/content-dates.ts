@@ -12,7 +12,7 @@ const dates: Record<string, ArticleDates> = {
  'what-is-a-good-internet-speed': {...originalGuide},
  'how-to-test-internet-speed': {...originalGuide,modified:'2026-11-17'},
  'why-is-my-wifi-so-slow': {...originalGuide,modified:'2026-11-22'},
- 'download-vs-upload-speed': {...originalGuide},
+ 'download-vs-upload-speed': {...originalGuide,modified:'2026-11-24'},
  'ping-and-jitter-explained': {...originalGuide},
  'how-much-internet-speed-do-i-need': {...originalGuide},
  'wifi-bands-24-5-6-ghz': {published:'2026-11-12',modified:'2026-11-12'},
