@@ -464,7 +464,11 @@ function ulTest(done) {
 	} catch (e) {}
 	let req = [];
 	let reqsmall = [];
-	for (let i = 0; i < settings.xhr_ul_blob_megabytes; i++) req.push(r);
+	const totalUploadBytes = Math.max(65536, Math.round(settings.xhr_ul_blob_megabytes * 1048576));
+	const fullChunks = Math.floor(totalUploadBytes / 1048576);
+	const remainderBytes = totalUploadBytes % 1048576;
+	for (let i = 0; i < fullChunks; i++) req.push(r);
+	if (remainderBytes > 0) req.push(r.buffer ? r.buffer.slice(0, remainderBytes) : r.slice(0, remainderBytes));
 	req = new Blob(req);
 	r = new ArrayBuffer(262144);
 	try {
@@ -564,7 +568,14 @@ function ulTest(done) {
 						//No Content-Type header in MPOT branch because it triggers bugs in some browsers
 						xhr[i].timeout = settings.request_timeout;
                         xhr[i].onerror = xhr[i].upload.onerror;
-                        xhr[i].ontimeout = xhr[i].upload.onerror;
+                        xhr[i].ontimeout = function() {
+							lastError = "Upload request timed out";
+							tverb("ul stream timed out " + i);
+							if (settings.xhr_ignoreErrors === 0) failed = true;
+							try { x.abort(); } catch (e) {}
+							delete xhr[i];
+							if (settings.xhr_ignoreErrors === 1) testStream(i, 0);
+						}.bind(this);
                         xhr[i].send(req);
 					}
 				}.bind(this),

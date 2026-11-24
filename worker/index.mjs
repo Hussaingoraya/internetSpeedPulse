@@ -1,6 +1,6 @@
 const noCache={'Cache-Control':'no-store, no-cache, must-revalidate, no-transform','X-Content-Type-Options':'nosniff'};
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{...noCache,'Content-Type':'application/json'}});
-export async function handleAPI(request, {uploadTimeoutMs=15000} = {}) {
+export async function handleAPI(request, {uploadTimeoutMs=15000,skipOriginCheck=false} = {}) {
  const url=new URL(request.url), path=url.pathname.replace(/\/$/,'');
  if(!path.startsWith('/api/'))return null;
  if(path.startsWith('/api/speed/') && request.headers.get('Sec-Fetch-Site')==='cross-site')return json({error:'Cross-site measurements are not allowed.'},403);
@@ -24,7 +24,7 @@ export async function handleAPI(request, {uploadTimeoutMs=15000} = {}) {
  }
  if(path==='/api/speed/upload'&&request.method==='POST') {
   const origin=request.headers.get('Origin');
-  if(origin&&origin!==url.origin)return json({error:'Cross-site uploads are not allowed.'},403);
+  if(!skipOriginCheck&&origin&&origin!==url.origin)return json({error:'Cross-site uploads are not allowed.'},403);
   const rawLength=request.headers.get('Content-Length'), length=rawLength===null?null:Number(rawLength);
   if(length!==null&&(!Number.isInteger(length)||length<0))return json({error:'Invalid Content-Length.'},400);
   if(length!==null&&length>8000000)return json({error:'Payload too large.'},413);

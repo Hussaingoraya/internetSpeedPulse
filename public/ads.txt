@@ -1,1 +1,2 @@
-google.com, pub-2709394280600943, DIRECT, f08c47fec0942fa0
+# Configure your single approved Google AdSense publisher ID before enabling ads:
+# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0

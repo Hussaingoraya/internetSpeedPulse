@@ -15,11 +15,12 @@ async function handleRequest(request: Request): Promise<Response> {
   }
   const origin = request.headers.get('origin');
   const host = request.headers.get('host') || new URL(request.url).host;
-  if (origin && origin !== `https://${host}` && origin !== `http://${host}`) {
+  const forwardedHost = request.headers.get('x-forwarded-host')?.split(',')[0]?.trim();
+  const allowedHosts = new Set([host, forwardedHost].filter(Boolean));
+  if (origin && ![...allowedHosts].some((h) => origin === `https://${h}` || origin === `http://${h}`)) {
     return Response.json({ error: 'Cross-site requests are not allowed.' }, { status: 403 });
   }
   if(request.headers.get('sec-fetch-site')==='cross-site')return Response.json({error:'Cross-site measurements are not allowed.'},{status:403,headers:{'Cache-Control':'no-store'}});
-  const headers = new Headers(request.headers);
   const url=new URL(request.url);
   const path=url.pathname.replace(/\/$/,'');
   if ((path==='/api/speed/download'&&request.method==='GET')||(path==='/api/speed/upload'&&request.method==='POST')) {
@@ -29,9 +30,7 @@ async function handleRequest(request: Request): Promise<Response> {
       if(!budget.allowed)return Response.json({error:'The website measurement transfer allowance is temporarily exhausted. Try another server.'},{status:503,headers:{'Cache-Control':'no-store','Retry-After':String(budget.retryAfter)}});
     }
   }
-  headers.delete('origin');
-  const normalized = new Request(request, { headers });
-  return await handleAPI(normalized) ?? Response.json({ error: 'Not found' }, { status: 404 });
+  return await handleAPI(request, { skipOriginCheck: true }) ?? Response.json({ error: 'Not found' }, { status: 404 });
 }
 
 export const GET = handleRequest;

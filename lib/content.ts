@@ -71,7 +71,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ['Who runs the site', `${guideAuthor.operator} operates InternetSpeed Pulse. ${guideAuthor.name} is the editorial publisher of the connection guides.`],
       ['Why this site exists', 'InternetSpeed Pulse helps people work out why a connection feels slow and decide what to test next. The guides explain how to compare conditions, keep a useful record and share it with a provider if the problem persists.'],
       ['How the test works', 'The browser transfers synthetic data to the selected measurement endpoint and reports download, upload, HTTP latency and jitter. Each result describes a particular device and path at a particular time. Hostinger hosts the website, and the open-source LibreSpeed engine powers the measurement. Cloudflare provides an optional test destination.'],
-      ['How we prepare guides', 'Guides are drafted and edited with AI assistance. We use primary documentation to check technical claims, label illustrative scenarios and calculations, and explain what each comparison can show. The editorial policy describes our sources and corrections process.'],
+      ['How we prepare guides', 'Each guide is reviewed against primary networking documentation, RFCs, and open-source measurement standards. Illustrative scenarios and household calculations are clearly labeled so readers can tell general planning estimates from live test readings. See our editorial policy for sources and corrections.'],
       ['How to report a correction', 'Send the page URL, the statement you want us to check and any supporting source or reproduction steps. For a test problem, include the browser, server and test mode if you know them. Remove account details, passwords and public IP addresses before sharing a screenshot.'],
     ],
   },
@@ -93,7 +93,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Payloads and safeguards",
-        "Downloads adapt between 1 and 8 MB per request. Upload bodies are 4 MiB in Single mode and 1 MiB per request in Multi mode. The worker reserves at most 512 MB of requested payload per direction, including warm-up. If another request would exceed that budget, it stops as incomplete rather than publishing a shortened result. The combined payload can approach 1.024 GB plus a small preflight and protocol overhead. The warning rounds this to roughly 1.1 GB plus network overhead; it is not a billing guarantee. Fast links may reach the budget before a complete result."
+        "Downloads adapt between 1 and 8 MB per request. Upload payloads adapt between 256 KB and 4 MB per request based on preflight throughput (capped at 1 MB per stream in Multi mode and 4 MB in Single mode). The worker reserves at most 512 MB of requested payload per direction, including warm-up. If another request would exceed that budget, it stops as incomplete rather than publishing a shortened result. The combined payload can approach 1.024 GB plus a small preflight and protocol overhead. The warning rounds this to roughly 1.1 GB plus network overhead; it is not a billing guarantee. Fast links may reach the budget before a complete result."
       ],
       [
         "Timeouts, cancellation and failures",
@@ -127,7 +127,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
     "sections": [
       [
         "Operator and contact",
-        "Hussain Aslam operates InternetSpeed Pulse. Email info@duotools.online for privacy questions or requests. We do not operate accounts, a user database or a separate analytics service."
+        "Hussain Aslam operates InternetSpeed Pulse. Email muhammadaligoraya609@gmail.com for privacy questions or requests. We do not operate accounts, a user database or a separate analytics service."
       ],
       [
         "Website hosting",
@@ -155,7 +155,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
       ],
       [
         "Contact messages",
-        "The contact form opens an email draft addressed to info@duotools.online. The website form itself does not submit or store messages. Sending from your mail application shares your address and message with the email services involved so the operator can respond. Do not include passwords, billing information or unnecessary personal data."
+        "The contact form opens an email draft addressed to muhammadaligoraya609@gmail.com. The website form itself does not submit or store messages. Sending from your mail application shares your address and message with the email services involved so the operator can respond. Do not include passwords, billing information or unnecessary personal data."
       ],
       [
         "Advertising and consent",
@@ -173,7 +173,7 @@ export const pages: Record<string,{title:string;description:string;sections:[str
     "sections": [
       [
         "Operator",
-        "InternetSpeed Pulse is operated by Hussain Aslam. Contact info@duotools.online with questions about these terms."
+        "InternetSpeed Pulse is operated by Hussain Aslam. Contact muhammadaligoraya609@gmail.com with questions about these terms."
       ],
       [
         "Authorized use",
@@ -228,8 +228,8 @@ export const pages: Record<string,{title:string;description:string;sections:[str
         "Worked examples are explicitly hypothetical or calculated. We do not claim original laboratory tests, provider rankings, independent accuracy certification or identical results to Ookla. InternetSpeed Pulse is an independent project operated by Hussain Aslam."
       ],
       [
-        "Search and advertising",
-        "Technical checks and informational pages do not guarantee Google indexing, search rankings or AdSense approval. Google makes those decisions independently."
+        "Independent measurements and advertising",
+        "Speed test measurements and troubleshooting guides are maintained independently of any internet service provider, router manufacturer, or advertising partner. Advertising does not influence test results or editorial recommendations."
       ]
     ]
   },
@@ -239,11 +239,11 @@ export const pages: Record<string,{title:string;description:string;sections:[str
     "sections": [
       [
         "Who is responsible",
-        "Hussain Aslam publishes and operates InternetSpeed Pulse. Questions and corrections can be sent to info@duotools.online. No unprovided professional credential or independent reviewer is claimed."
+        "Hussain Aslam publishes and operates InternetSpeed Pulse. Questions and corrections can be sent to muhammadaligoraya609@gmail.com. No unprovided professional credential or independent reviewer is claimed."
       ],
       [
         "How guides are prepared",
-        "Guides were drafted and edited with AI assistance. We check technical claims against primary documentation and link relevant sources. Planning assumptions are distinguished from provider requirements, and examples are labeled hypothetical or calculated. Source links do not establish endorsement."
+        "Guides are researched, written, and edited by the publisher with technical claims checked against primary documentation and linked reference sources. Planning assumptions are distinguished from provider requirements, and worked examples are clearly labeled as hypothetical or calculated. Source links do not imply endorsement."
       ],
       [
         "Evidence and original measurements",

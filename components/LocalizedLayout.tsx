@@ -25,8 +25,11 @@ export const footerLinks = [
 
 export function DocumentShell({children,locale,header,footer}:{children:React.ReactNode;locale:Locale;header:React.ReactNode;footer:React.ReactNode}) {
  const {nav}=dictionaries[locale];
+ const rawPublisherId=(process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID||'').trim();
+ const publisherId=/^pub-\d{16}$/.test(rawPublisherId)?`ca-${rawPublisherId}`:rawPublisherId;
+ const hasValidAdsense=/^ca-pub-\d{16}$/.test(publisherId);
  return <html lang={locale} dir={direction(locale)} className={inter.variable}>
-  <head><meta name="google-adsense-account" content="ca-pub-2709394280600943"/><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2709394280600943" crossOrigin="anonymous"/></head>
+  <head>{hasValidAdsense&&<><meta name="google-adsense-account" content={publisherId}/><script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${publisherId}`} crossOrigin="anonymous"/></>}</head>
   <body><PreferencesProvider><a href="#main" className="skip">{nav[9]}</a>{header}<main id="main">{children}</main>{footer}</PreferencesProvider></body>
  </html>;
 }

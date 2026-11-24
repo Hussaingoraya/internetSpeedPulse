@@ -1,9 +1,8 @@
 export const guideAuthor = {
- name: 'InternetSpeed Pulse',
- type: 'Organization',
- role: 'Editorial publisher',
+ name: 'Hussain Aslam',
+ type: 'Person',
+ role: 'Founder & Publisher',
  operator: 'Hussain Aslam',
  profilePath: '/about/',
- // TODO(Hussain): Replace this placeholder with a short approved operator bio.
- bio: '',
+ bio: 'Hussain Aslam builds independent browser utilities and practical networking guides focused on transparent, repeatable connection diagnostics.',
 } as const;

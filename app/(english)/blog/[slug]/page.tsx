@@ -76,7 +76,7 @@ export default async function Article({params}:Props) {
     <Link className="primary" href="/#test-data-warning">Run an internet throughput test</Link>
    </p>}
    <div className="byline"><Link href={guideAuthor.profilePath}>{guideAuthor.name}</Link> · {guideAuthor.role} · Published <time dateTime={published}>{displayContentDate(published)}</time> · Updated <time dateTime={modified}>{displayContentDate(modified)}</time></div>
-   <p className="byline">Guides and policies are in English. Prepared with AI assistance. <Link href="/editorial-policy/">Editorial policy and corrections</Link></p>
+   <p className="byline">Reviewed against primary networking documentation. <Link href="/editorial-policy/">Editorial policy and corrections</Link></p>
   </header>
   <Art type={guide.art}/>
   <div className="article-body">
