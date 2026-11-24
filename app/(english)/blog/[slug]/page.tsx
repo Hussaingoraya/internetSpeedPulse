@@ -16,12 +16,12 @@ import {articleSearchTitles} from '@/lib/seo';
 type Props = {params: Promise<{slug:string}>};
 
 const relatedOriginal: Record<string,string[]> = {
- 'what-is-a-good-internet-speed': ['how-much-internet-speed-do-i-need','video-call-internet-speed','how-to-test-internet-speed'],
- 'how-to-test-internet-speed': ['internet-slow-at-night','why-speed-tests-differ','speed-test-evidence-for-provider'],
- 'why-is-my-wifi-so-slow': ['internet-keeps-disconnecting','router-placement-guide','wifi-bands-24-5-6-ghz'],
- 'download-vs-upload-speed': ['mbps-vs-mbs','video-call-internet-speed','what-is-a-good-internet-speed'],
- 'ping-and-jitter-explained': ['video-call-internet-speed','does-vpn-slow-internet','why-speed-tests-differ'],
- 'how-much-internet-speed-do-i-need': ['what-is-a-good-internet-speed','video-call-internet-speed','mbps-vs-mbs'],
+ 'what-is-a-good-internet-speed': ['how-much-internet-speed-do-i-need','video-call-internet-speed','how-to-test-internet-speed','ethernet-vs-wifi'],
+ 'how-to-test-internet-speed': ['internet-slow-at-night','why-speed-tests-differ','speed-test-evidence-for-provider','does-vpn-slow-internet'],
+ 'why-is-my-wifi-so-slow': ['internet-keeps-disconnecting','router-placement-guide','wifi-bands-24-5-6-ghz','ethernet-vs-wifi','wifi-connected-no-internet'],
+ 'download-vs-upload-speed': ['mbps-vs-mbs','video-call-internet-speed','ethernet-vs-wifi','does-vpn-slow-internet','internet-slow-at-night'],
+ 'ping-and-jitter-explained': ['video-call-internet-speed','does-vpn-slow-internet','why-speed-tests-differ','internet-keeps-disconnecting'],
+ 'how-much-internet-speed-do-i-need': ['what-is-a-good-internet-speed','video-call-internet-speed','mbps-vs-mbs','internet-slow-at-night'],
 };
 
 export function generateStaticParams() {

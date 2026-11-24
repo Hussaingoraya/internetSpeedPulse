@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type {Metadata} from 'next';
 import {origin} from '@/lib/content';
 import {dictionaries} from '@/src/i18n/dictionaries';
-import {alternates,localePath,type Locale} from '@/src/i18n/locales';
+import {localePath,type Locale} from '@/src/i18n/locales';
 import SpeedTest from './SpeedTest';
 
 const brand='InternetSpeed Pulse';
@@ -17,7 +17,8 @@ export function homeMetadata(locale:Locale):Metadata {
  const url=origin+localePath(locale);
  return {
   metadataBase:new URL(origin),title:{absolute:title},description:home[1],
-  alternates:{canonical:url,languages:alternates(origin)},
+  robots:locale==='en'?undefined:{index:false,follow:true},
+  alternates:{canonical:url},
   openGraph:{type:'website',siteName:brand,title,description:home[1],url,locale:ogLocale[locale],images:[shareImage]},
  };
 }
